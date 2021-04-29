@@ -56,6 +56,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Global.cs" />
+    <Compile Include="NodoArbol.cs" />
     <Compile Include="Nodos.cs" />
     <Compile Include="NodoVersiones.cs" />
     <Compile Include="Program.cs" />

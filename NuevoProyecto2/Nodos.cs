@@ -14,7 +14,7 @@ namespace NuevoProyecto2
         public NodoVersiones<T> primero { get; set; }
         public NodoVersiones<T> anterior { get; set; }
 
-
+        public NodoArbol<T> raiz { get; set; }
 
         public string pathDirectorio()
         {
@@ -26,6 +26,7 @@ namespace NuevoProyecto2
             primero = null;
             actual = null;
             anterior = null;
+            raiz = null;
 
         }
 
@@ -291,6 +292,50 @@ namespace NuevoProyecto2
             }
 
 
+        }
+
+
+        public bool ValidarArbol()
+        {
+            bool NodoVacio;
+            if (raiz == null)
+            {
+                return NodoVacio = true;
+            }
+            else
+            {
+                return NodoVacio = false;
+            }
+        }
+
+        /*Función que realiza la creación de un Arbol*/
+        public NodoArbol<T> Insertar(T valor, T valor2,
+            Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            raiz = Insertar(raiz, valor, valor2, MenorQue, MayorQue);
+            return raiz;
+        }
+
+        public NodoArbol<T> Insertar(NodoArbol<T> raizSub, T valor, T valor2,
+            Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            if (raizSub == null)
+            {
+                raizSub = new NodoArbol<T>
+                { data = valor, izq = null, der = null };
+            }
+            else if (MenorQue(valor, raizSub.data))
+            {
+                raizSub.izq = Insertar(raizSub.izq, valor, MenorQue, MayorQue);
+            }
+            else if (MayorQue(valor, raizSub.data))
+            {
+                raizSub.der = Insertar(raizSub.der, valor, MenorQue, MayorQue);
+            }
+            else throw new Exception("Nodo duplicado");
+
+
+            return raizSub;
         }
 
     }

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace NuevoProyecto2
 {
-    class Global
+    class Global<T>
     {
         public static Nodos<Repositorio> manejoAr = new Nodos<Repositorio>();
+        public static Nodos<T> nodoArbol = new Nodos<T>();
         public static string _path = @"C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\Proyecto 1\Proyecto1\temp\";
         public static string nuevoPath = "";
         public static string NombreArch = "";
