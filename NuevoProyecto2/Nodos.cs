@@ -10,15 +10,16 @@ namespace NuevoProyecto2
     class Nodos<T>
     {
         //Se crean los Nodos necesarios para el buen funcionamiento de la Lista
-        public NodoVersiones<T> actual { get; set; }
-        public NodoVersiones<T> primero { get; set; }
-        public NodoVersiones<T> anterior { get; set; }
-
-        public NodoArbol<T> raiz { get; set; }
+        private NodoVersiones<T> actual { get; set; }
+        private NodoVersiones<T> primero { get; set; }
+        private NodoVersiones<T> anterior { get; set; }
+        private NodoVersiones<T> enlace { get; set; }
+        private NodoArbol<T> raiz { get; set; }
+        public NodoArbol<T> RaizRepositorio { get; set; }
 
         public string pathDirectorio()
         {
-            return Global._path;
+            return Global<string>._path;
         }
 
         public Nodos()
@@ -27,6 +28,7 @@ namespace NuevoProyecto2
             actual = null;
             anterior = null;
             raiz = null;
+            enlace = null;
 
         }
 
@@ -45,14 +47,19 @@ namespace NuevoProyecto2
             }
         }
 
+
+   
+
         //Método encargado de crear Nodos en la cabeza de la Lista
-        public void agregarVersion(T version)
+        public void agregarVersion(T version, Nodos<T> ArbolCompleto)
         {
             NodoVersiones<T> nuevaVersion = new NodoVersiones<T>(version);
 
 
             nuevaVersion.siguiente = primero;
             primero = nuevaVersion;
+            enlace = (NodoVersiones<T>)ArbolCompleto;
+            
 
 
         }
@@ -65,7 +72,7 @@ namespace NuevoProyecto2
             string conten = "";
             try
             {
-                StreamReader sr = new StreamReader(Global._path + nombretxt);
+                StreamReader sr = new StreamReader(Global<string>._path + nombretxt);
                 line = sr.ReadLine();
                 while (line != null)
                 {
@@ -97,16 +104,12 @@ namespace NuevoProyecto2
                 lista = actual.dato.ToString();
                 nuevoRepositorio = lista.Split('%');
                 ultimaVersion = new Repositorio(nuevoRepositorio[0], nuevoRepositorio[1], nuevoRepositorio[2], nuevoRepositorio[3], nuevoRepositorio[4]);
-                if (nuevoRepositorio[4].Substring(8).Equals("1"))
-                {
+                
                     Console.WriteLine("\t\t\t\t" + ultimaVersion.contadorauxiliar.ToString().Substring(14) + "\t" + ultimaVersion.fechaapoyo.ToString().Substring(7) +
                         "\t" + ultimaVersion.comentario.ToString().Substring(12) + "\n");
                     actual = actual.siguiente;
-                }
-                else
-                {
-                    actual = actual.siguiente;
-                }
+                
+                
             }
 
         }
@@ -183,33 +186,57 @@ namespace NuevoProyecto2
 
         //Esta función servirá para buscar una versión, tomar en cuenta que recibe un parametro, ya que no se buscará
         //por index sino que por contenido
-        public string BusquedaVersion(string version)
+        public (string lista, string contenido) BusquedaVersion(string version)
         {
             actual = primero;
-            string lista = "";
+            string listNuevoRepositorio = "";
+            string ListRepositorioCompleto = "";
             string contenerVersion = "";
+            string ListRepositorioArbol = "";
+            string[] repositorioCompleto = null;
             string[] nuevoRepositorio = null;
+            string[] RepositorioArbol = null;
+            string contenido = "";
             while (actual != null)
             {
                 //Se recorre hasta llegar al nodo indico para esto se recorre todo el contenido del nodo, a modo de
                 //obtener el numero de la versión y luego de que coincida, retornar en modo de lista, la información
                 //Del nodo
                 int i = 0;
-                for (i = 0; i < 1; i++)
+                int j = 0;
+                int k = 0;
+                int l = 0;
+                for(i=0; i<1; i++)
                 {
-                    lista = actual.dato.ToString();
-                    nuevoRepositorio = lista.Split('%');
-                    Repositorio busquedaVersion = new Repositorio(nuevoRepositorio[0], null, null, null, null);
-                    contenerVersion = busquedaVersion.contadorauxiliar.Substring(14);
-                    if (contenerVersion.Equals(version))
+                    ListRepositorioCompleto = actual.dato.ToString();
+                    repositorioCompleto = ListRepositorioCompleto.Split('(');
+                    
+
+                    for (j = 0; j < 1; j++)
                     {
-                        return lista;
-                        break;
+                        listNuevoRepositorio = repositorioCompleto[0].ToString();
+                        nuevoRepositorio = listNuevoRepositorio.Split('%');
+                        Repositorio busquedaVersion = new Repositorio(nuevoRepositorio[0], null, null, null, null);
+                        contenerVersion = busquedaVersion.contadorauxiliar.Substring(14);
+                        if (contenerVersion.Equals(version))
+                        {
+                            for(k=1;k< repositorioCompleto.Length; k++)
+                            {
+                                for ()
+                                {
+
+                                }
+                                contenido = contenido + repositorioCompleto[k]+"\n\t\t";
+                            }
+                            return (listNuevoRepositorio,contenido);
+                            break;
+                        }
                     }
+                    actual = actual.siguiente;
                 }
-                actual = actual.siguiente;
             }
-            return null;
+                
+            return (null,null);
         }
 
         //Se utiliza esta función, para llevar el conteo de un nodo para posteriormete buscarlo por index en la lista 
@@ -309,34 +336,60 @@ namespace NuevoProyecto2
         }
 
         /*Función que realiza la creación de un Arbol*/
-        public NodoArbol<T> Insertar(T valor, T valor2,
-            Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+
+        internal NodoArbol<T> Insertar(T valor, T repositorio, Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
         {
-            raiz = Insertar(raiz, valor, valor2, MenorQue, MayorQue);
-            return raiz;
+            (raiz, RaizRepositorio) = Insertar(raiz, RaizRepositorio, valor, repositorio, MenorQue, MayorQue);
+            return RaizRepositorio;
         }
 
-        public NodoArbol<T> Insertar(NodoArbol<T> raizSub, T valor, T valor2,
+        /*public NodoArbol<T> Insertar(T valor, Repositorio valor2,
+            Func<int, int, bool> MenorQue, Func<int, int, bool> MayorQue)
+        {
+            
+        }*/
+
+        public (NodoArbol<T> numero, NodoArbol<T> datoNodo) Insertar(NodoArbol<T> raizSub, NodoArbol<T> reposi, T valor, T repositorio, 
             Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
         {
             if (raizSub == null)
             {
                 raizSub = new NodoArbol<T>
                 { data = valor, izq = null, der = null };
+
+                reposi = new NodoArbol<T>
+                { data = repositorio, izq = null, der = null };
             }
             else if (MenorQue(valor, raizSub.data))
             {
-                raizSub.izq = Insertar(raizSub.izq, valor, MenorQue, MayorQue);
+                (raizSub.izq,reposi.izq) = Insertar(raizSub.izq, reposi.izq, valor, repositorio, MenorQue, MayorQue);
             }
             else if (MayorQue(valor, raizSub.data))
             {
-                raizSub.der = Insertar(raizSub.der, valor, MenorQue, MayorQue);
+                (raizSub.der, reposi.der) = Insertar(raizSub.der, reposi.der, valor, repositorio, MenorQue, MayorQue);
             }
             else throw new Exception("Nodo duplicado");
 
 
-            return raizSub;
+            return (raizSub,reposi);
         }
 
+        public void eliminarArboles()
+        {
+            Global<object>.nodoArbol.raiz = null;
+            Global<object>.nodoArbol.RaizRepositorio = null;
+
+        }
+
+
+        public string convertirX(Object x)
+        {
+            return x.ToString();
+             
+        }
+
+
+
+        
     }
 }

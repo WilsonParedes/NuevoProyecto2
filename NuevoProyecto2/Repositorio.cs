@@ -17,37 +17,66 @@ namespace NuevoProyecto2
 
         public string fecha;
         public string fechaapoyo { get; set; }
+        public string separador { get; set; }
 
-        public string estado { get; set; }
+        public ulong posicion { get; set; }
+
+        public string nombreArchivo { get; set; }
+
 
         public Repositorio(string comentario, string contenido)
         {
 
-            this.contador = Global.manejoAr.DevueveCorrelativoVersion() + 1;
+            this.contador = Global<object>.manejoAr.DevueveCorrelativoVersion() + 1;
             this.comentario = comentario;
             this.contenido = contenido;
             fecha = DateTime.Now.ToString();
-            this.estado = "1";
+            this.separador = "|";
         }
 
-        public Repositorio(string contadorauxiliar, string fechadeapoyo, string comentario, string contenido, string estado)
+        public Repositorio(string nombreArchivo, string contenido, string identificador)
+        {
+            this.nombreArchivo = nombreArchivo;
+            this.fecha = DateTime.Now.ToString();
+        }
+
+
+        public Repositorio(string contadorauxiliar, string fechadeapoyo, string comentario, string contenido, string separador)
         {
             this.contadorauxiliar = contadorauxiliar;
             this.fechaapoyo = fechadeapoyo;
             this.comentario = comentario;
             this.contenido = contenido;
-            this.estado = estado;
+            this.separador = separador;
         }
+        public Repositorio(ulong posicion)
+        {
+            this.posicion = posicion;
+        }
+
 
         public override string ToString()
         {
+            if (posicion>0)
+            {
+                return posicion.ToString();
+            }
+            /*Datos Arbol*/
+            if (contador <= 0)
+            {
+                return $"(" +
+                       $"Nombre Archivo: {nombreArchivo}" + "%" +
+                       $"Fecha: {fecha}";
+            }
             return $"Versión No.:  {contador}" + "%" +
                    $"Fecha: {fecha}" + "%" +
                    $"Comentario: {comentario}" + "%" +
                    $"Contenido: {contenido}" + "%" +
-                   $"Estado: {estado}";
+                   $"Separador: {separador}";
 
         }
+
+        
 
 
     }

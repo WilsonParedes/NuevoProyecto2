@@ -24,8 +24,9 @@ namespace NuevoProyecto2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MostrarInOrden(Global.nodoArbol.raiz, 0, " ");
+            MostrarInOrden(Global<int>.nodoArbol.RaizRepositorio, 0, " ");
         }
+
         int auxX = 0;
         private void MostrarInOrden(NodoArbol<int> raiz, int auxY, string espacio)
         {
@@ -50,7 +51,7 @@ namespace NuevoProyecto2
                 /*
                 Console.SetCursorPosition(1 + auxX - auxY, 1 + auxY);*/
                 /*Console.Write(raiz.data)*/
-                ;
+                
                 MostrarInOrden(raiz.der, 50 + auxY, espacio);
 
             }

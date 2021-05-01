@@ -8,8 +8,11 @@ namespace NuevoProyecto2
 {
     class NodoVersiones<T>
     {
+        private Nodos<T> v;
         public T dato { get; set; }
         public NodoVersiones<T> siguiente { get; set; }
+
+        public NodoVersiones<T> enlace { get; set; }
 
 
 
@@ -17,6 +20,20 @@ namespace NuevoProyecto2
         {
             this.dato = dato;
             this.siguiente = null;
+            this.enlace = null;
         }
+
+
+        public NodoVersiones(Nodos<T> v)
+        {
+            this.v = v;
+        }
+
+        public static explicit operator NodoVersiones<T>(Nodos<T> Version)
+        {
+            return new NodoVersiones<T>(Version);
+            throw new NotImplementedException();
+        }
+
     }
 }
