@@ -210,8 +210,6 @@ namespace NuevoProyecto2
                 {
                     ListRepositorioCompleto = actual.dato.ToString();
                     repositorioCompleto = ListRepositorioCompleto.Split('(');
-                    
-
                     for (j = 0; j < 1; j++)
                     {
                         listNuevoRepositorio = repositorioCompleto[0].ToString();
@@ -222,11 +220,8 @@ namespace NuevoProyecto2
                         {
                             for(k=1;k< repositorioCompleto.Length; k++)
                             {
-                                /*for ()
-                                {
-
-                                }*/
-                                contenido = contenido + repositorioCompleto[k]+"\n\t\t";
+                                
+                                contenido = contenido + repositorioCompleto[k]+"\n"+"|";
                             }
                             return (listNuevoRepositorio,contenido);
                             break;

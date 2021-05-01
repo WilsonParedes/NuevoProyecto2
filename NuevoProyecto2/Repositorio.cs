@@ -22,6 +22,8 @@ namespace NuevoProyecto2
         public ulong posicion { get; set; }
 
         public string nombreArchivo { get; set; }
+        public string pesoArchivo { get; set; }
+        public string valorHexa { get; set; }
 
 
         public Repositorio(string comentario, string contenido)
@@ -34,10 +36,12 @@ namespace NuevoProyecto2
             this.separador = "|";
         }
 
-        public Repositorio(string nombreArchivo, string contenido, string identificador)
+        public Repositorio(string nombreArchivo, string contenido, string pesoArchivo, string valorHexa)
         {
             this.nombreArchivo = nombreArchivo;
+            this.pesoArchivo = pesoArchivo;
             this.fecha = DateTime.Now.ToString();
+            this.valorHexa = valorHexa;
         }
 
 
@@ -66,7 +70,9 @@ namespace NuevoProyecto2
             {
                 return $"(" +
                        $"Nombre Archivo: {nombreArchivo}" + "%" +
-                       $"Fecha: {fecha}";
+                       $"Peso Archivo:  {pesoArchivo} " + " kb" + "%"  +
+                       $"Fecha: {fecha}" + "%" +
+                       $"Valor Hexa:  { valorHexa}";
             }
             return $"Versión No.:  {contador}" + "%" +
                    $"Fecha: {fecha}" + "%" +

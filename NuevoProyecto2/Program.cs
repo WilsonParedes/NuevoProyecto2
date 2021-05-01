@@ -30,6 +30,7 @@ namespace NuevoProyecto2
 
             do
             {
+                repetir = false;
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write(codSys);
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -37,84 +38,42 @@ namespace NuevoProyecto2
                 Console.Write("\\");
                 nombreCarpeta = Console.ReadLine();
                 Console.ForegroundColor = ConsoleColor.White;
-                if ((inicializar.Contains("init")) == true)
+                if ((inicializar.Contains("init")) == false)
                 {
-                    //Método para crear el Directorio
-                    CreacionDirectorio(inicializar.Substring(5), nombreCarpeta, codSys);
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.Write(codSys);
-                    op = Console.ReadLine();
-                    while (op != "exit")
+                    Console.Write("Incialice el programa 'init'\n");
+                    repetir = true;
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    try
                     {
-                        if (op.Contains("create ver"))
+                        repetir = CreacionDirectorio(inicializar.Substring(5), nombreCarpeta, codSys);
+                    }
+                    catch (ArgumentOutOfRangeException t)
+                    {
+                        Console.Write(codSys + "Coloque una ruta valida\n");
+                        repetir = true;
+                    }
+                    //Método para crear el Directorio
+                    do
+                    {
+                        Console.Write(codSys);
+                        op = Console.ReadLine();
+                        if (op.Contains("create file"))
+                        {
+                            CrearArchivosEnDirectorio(op, codSys);
+                        }else if(op.Contains("create ver"))
                         {
 
                             string cadena = "";
                             Global<bool>.nodoArbol.eliminarArboles();
                             Nodos<Object> ArbolCompleto = new Nodos<Object>();
-                            (cadena,ArbolCompleto) = CrearVers(op);
-                            CrearNodoListaEnlazada(cadena,op, ArbolCompleto);
+                            (cadena, ArbolCompleto) = CrearVers(op);
+                            CrearNodoListaEnlazada(cadena, op, ArbolCompleto);
                             op = Console.ReadLine();
-                            /*
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
-                            contenido = Convert.ToString(Global.manejoAr.LeerArchivo(Global.NombreArch));//Se extrae el contenido del TXT modificado o no
-                            Console.ForegroundColor = ConsoleColor.White;
-
-                            /*Se agregó este nuevo bloque de if para validar si se almacenará o no un nodo
-                            if (!Global.manejoAr.validarNodos())
-                            {
-                                //Si la Lista esta Llena, se crea un nuevo nodo para preparar la comparación de ambos contenidos, TXT y Versión anterio
-                                string lista = Global.manejoAr.recorredeapoyo();
-                                string contenidoanterior = "";
-                                int i = 0;
-                                //Con este for extraemos el contenido que deseamos evaluar de la última versión almacenada en la lista enlazada
-                                for (i = 0; i < 1; i++)
-                                {
-                                    string[] nuevoRepositorio = lista.Split('%');
-                                    Repositorio ultimaVersion = new Repositorio(null, null, nuevoRepositorio[2], nuevoRepositorio[3], nuevoRepositorio[4]);
-                                    contenidoanterior = ultimaVersion.contenido.ToString();
-                                }
-                                //Con él if, logramos comparar el contenido de la versión anterior, con el contenido extraido del TXT
-                                if (!Global.manejoAr.CompararContenido(contenido, contenidoanterior.Substring(11)))
-                                {
-                                    //Si los contenidos son distintos, se procede a crear una Nueva versión
-                                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                    Console.WriteLine(Global.nuevoPath + "\\" + "En el archivo txt existe una modificación, se crea una nueva versión, por favor presione Enter");
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                    Console.ReadLine();
-                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                    Console.Write(Global.nuevoPath + "\\" + "Ingrese un comentario para el repositorio\\");
-                                    Console.ForegroundColor = ConsoleColor.DarkGreen;
-                                    comentario = Console.ReadLine();
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                    Global.manejoAr.agregarVersion(new Repositorio(comentario, contenido));
-                                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                    Console.WriteLine(Global.nuevoPath + "\\" + "Se actualiza el nodo exitosamente");
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                }
-                                else
-                                {
-                                    //Si los contenidos son iguales, no es necesario crear una versión nueva
-                                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                                    Console.WriteLine("El txt no sufrio ninguna modificación");
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                }
-
-                            }
-                            else
-                            {
-                                //Si la Lista enlazada se encuentra vacía, se procede a crear un Nodo Cabeza
-                                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                Console.Write(Global.nuevoPath + "\\" + "Ingrese un comentario para el repositorio\\");
-                                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                                comentario = Console.ReadLine();
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Global.manejoAr.agregarVersion(new Repositorio(comentario, contenido));
-                                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                Console.WriteLine(Global.nuevoPath + "\\" + "Se almacenó el nodo exitosamente");
-                                Console.ForegroundColor = ConsoleColor.White;
-
-                            }
-                            op = Console.ReadLine();*/
                         }
                         else if (op.Equals("read"))
                         {
@@ -143,29 +102,45 @@ namespace NuevoProyecto2
                             try
                             {
                                 string version;
-                                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                Console.ForegroundColor = ConsoleColor.DarkGreen;
                                 Console.ForegroundColor = ConsoleColor.White;
-                                string nuevaLista="";
-                                string contenidoLista="";
-                                (nuevaLista,contenidoLista)= Global<object>.manejoAr.BusquedaVersion(op.Substring(7));//Llamada al método que realiza la busqueda
+                                string nuevaLista = "";
+                                string contenidoLista = "";
+                                string[] ArrayContenido = null;
+                                string nuevocontenidoLista = "";
+                                string[] AuxiliarArrayContenido = null;
+                                string AuxiliarnuevocontenidoLista = "";
+                                (nuevaLista, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(op.Substring(7));//Llamada al método que realiza la busqueda
                                 int j = 0;
+                                int k = 0;
+                                int l = 0;
+                                /*For para arreglar el formato del contenido almacenado en el árbol*/
+                                ArrayContenido = contenidoLista.Split('|');
+                                for (k = 0; k < ArrayContenido.Length-2; k++)
+                                {
+                                    AuxiliarArrayContenido = ArrayContenido[k].Split('%');
+                                    for (l = 0; l < 4; l++)
+                                    {
+                                        
+                                        nuevocontenidoLista = nuevocontenidoLista + AuxiliarArrayContenido[l]+"\n\t\t";
+                                    }
+                                }
                                 //El if y for ayudarán a imprimir los datos de la versión obtenida por el método BusquedaVersion
                                 if (nuevaLista != null)
                                 {
                                     string[] nuevoArreglo = nuevaLista.Split('%');
                                     for (j = 0; j < 1; j++)
                                     {
-                                        Repositorio ultimaVersion = new Repositorio(nuevoArreglo[0], nuevoArreglo[1], nuevoArreglo[2], nuevoArreglo[3],"/");
+                                        Repositorio ultimaVersion = new Repositorio(nuevoArreglo[0], nuevoArreglo[1], nuevoArreglo[2], nuevoArreglo[3], "/");
+                                        Console.ForegroundColor = ConsoleColor.White;
+                                        Console.WriteLine("\t\n            DATOS ALMACENADOS DE LA VERSIÓN");
                                         Console.ForegroundColor = ConsoleColor.DarkCyan;
                                         Console.WriteLine("\t" + ultimaVersion.contadorauxiliar.ToString());
                                         Console.WriteLine("\t" + ultimaVersion.fechaapoyo.ToString());
                                         Console.WriteLine("\t" + ultimaVersion.comentario.ToString());
-                                        Console.WriteLine("\t" + "Contenido: \n" + "\t\t" + contenidoLista);
+                                        Console.WriteLine("\t" + "Contenido de la capeta: \n");
+                                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                        Console.WriteLine("\t\t" + nuevocontenidoLista);
                                         Console.ForegroundColor = ConsoleColor.White;
-                                        /*StreamWriter escribirTXT = new StreamWriter(Global<string>.nuevoPath);
-                                        escribirTXT.Write(ultimaVersion.contenido.ToString().Substring(12));
-                                        escribirTXT.Close();*/
 
                                     }
                                 }
@@ -176,8 +151,6 @@ namespace NuevoProyecto2
                                     Console.WriteLine("LA VERSIÓN NO EXISTE");
                                     Console.ForegroundColor = ConsoleColor.White;
                                 }
-
-
                                 op = Console.ReadLine();
                             }
                             catch
@@ -185,8 +158,8 @@ namespace NuevoProyecto2
                                 Console.WriteLine(codSys + "La ruta de acceso no es valida");
                                 op = Console.ReadLine();
                             }
-                            }
-                            
+                        }
+
                         else if (op.Equals("binnacle"))
                         {
                             //Con este caso se imprime por consola la información de las Versiones, siguiendo las especificación del
@@ -208,7 +181,8 @@ namespace NuevoProyecto2
                             Global<int>.manejoAr.eliminarNodo(Global<int>.manejoAr.obtenerIndice(eliminar) - 1);//Llamada al método ElminarNodo
                             op = Console.ReadLine();
                             break;
-                        }else if (op.Contains("show tree view"))
+                        }
+                        else if (op.Contains("show tree view"))
                         {
                             Application.EnableVisualStyles();
                             /*Application.SetCompatibleTextRenderingDefault(false);*/
@@ -217,22 +191,17 @@ namespace NuevoProyecto2
                         }
                         else
                         {
+                            if (op.Equals("exit"))
+                            {
+                                break;
+                            }
                             //Cuando no ingrese ninguna opcion validad el usuario se repetirá el menú
-                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write(codSys + "\\La opción no existe, consulte --dir-- para ayuda\n");
                             /*Console.Write("error de comando");*/
-                            Console.Write(codSys);
-                            op = Console.ReadLine();
                         }
-                    }
+                    } while (op != "exit");
                 }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.Write(codSys);
-                    Console.Write("Incialice el programa 'init'\n");
-                    repetir = true;
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
+            
             } while (repetir);
         }
 
@@ -240,37 +209,26 @@ namespace NuevoProyecto2
         public static void Opciones()
         {
             Console.WriteLine("");
-            Console.WriteLine("search <Version>:          Busca una versión del Repositorio");
-            Console.WriteLine("create file <Archivo>:     Crea archivos en la ruta de acceso");
-            Console.WriteLine("create ver <Nombre>:       Crea un versión de la ruta de acceso");
-            Console.WriteLine("binnacle:                  Bitacora de Registros del Repositorio");
-            Console.WriteLine("delete <Version>:          Borra una versión del Repositorio");
-            Console.WriteLine("read:                      Lee la version actual");
-            Console.WriteLine("show tree view <Version>:  Muestra el árbol completo");
+            Console.WriteLine("Comando              Parametro                Descripción ayuda");
+            Console.WriteLine("search           <Numero Versión>:    Busca una versión del Repositorio");
+            Console.WriteLine("create file      <Nombre Archivo>:    Crea archivos en la ruta de acceso");
+            Console.WriteLine("create ver       <Nombre Versión>:    Crea un versión de la ruta de acceso");
+            Console.WriteLine("binnacle:                             Bitacora de Registros del Repositorio");
+            Console.WriteLine("delete           <Número Versión>:    Borra una versión del Repositorio");
+            Console.WriteLine("read:                                 Lee la version actual");
+            Console.WriteLine("show tree view   <Número Version>:    Muestra el árbol completo");
         }
 
         //Método para crear directorio
-        public static void CreacionDirectorio(string pathUsuario, string nombreCarpeta, string codSys)
+        public static bool CreacionDirectorio(string pathUsuario, string nombreCarpeta, string codSys)
         {
 
-            bool salir = false;
+            bool repetir = false;
             Global<string>.folderParh = pathUsuario;
-            if (Directory.Exists(pathUsuario))
+            if (Directory.Exists(pathUsuario)&&(!pathUsuario.Equals("")))
             {
                 try
                 {
-                    //Si la ruta de acceso existe, se da la opción para eliminar datos o utilizar los mismos
-                    /*Console.WriteLine(codSys + "La ruta de acceso exite \n");
-                    Console.Write(Global.folderParh + "\\"+nombreCarpeta);*/
-                    /*//se almacena el contenido del directorio en un Array para posteriormente recorrer
-                    string[] lita = new string[10];
-                    lita = Directory.GetFiles(Global.folderParh);
-                    int i = 0;
-                    for (i = 0; i < lita.Length; i++)
-                    {
-                        Console.WriteLine(lita[i].ToString() + "\n");
-                    }*/
-
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine(Directory.CreateDirectory(Global<string>.folderParh + "\\" + nombreCarpeta + "\\"));
                     Global<string>._pathTexto = (Global<string>.folderParh + "\\" + nombreCarpeta + "\\");
@@ -280,168 +238,69 @@ namespace NuevoProyecto2
                 catch
                 {
                     Console.WriteLine(codSys + "La ruta de acceso no es valida");
+                    repetir = true;
                 }
-                try
-                {
-                    do
-                    {
-                        try
-                        {
-                            salir = false;
-                            string crearArchivo = "";
-                            //Crea nuevos elementos dentro del Directorio, el usuario colocará el mismo para Crear el archivo
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                            Console.Write(codSys);
-                            crearArchivo = Console.ReadLine();
-                            if (crearArchivo.Contains("create file"))
-                            {
-                                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                                Global<string>.NombreArch = crearArchivo.Substring(12);
-                                Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
-                                StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
-                                sw.Close();
-                                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                Console.WriteLine(codSys + "Archivo Creado");
-                                Console.ForegroundColor = ConsoleColor.White;
-                            }
-                            else
-                            {
-                                if (crearArchivo.Equals("exit"))
-                                {
-                                    salir = true;
-                                }
-                            }
-                        }
-                        catch (FileNotFoundException)
-                        {
-                            Console.WriteLine(codSys + "El archivo que intenta crear no es correcto");
-                        }
-
-                    } while (!salir);
-
-                }
-                catch (FileNotFoundException)
-                {
-                    Console.WriteLine(codSys + "No se ha encontrado el archivo");
-                }
-
             }
             else
             {
-                Console.WriteLine(codSys + "La ruta de acceso no es valida");
+                Console.WriteLine(codSys + "No se puede crear la ruta, intente de nuevo\n");
+                repetir = true;
             }
+            return repetir;
+        }
 
-
-
-            /*
-            //se evalua si existe el directorio
-            if (!Directory.Exists(Global.folderParh))
+        public static void CrearArchivosEnDirectorio(string crearArchivo, string codSys)
+        {
+            try
             {
-                //Sino existe, se crea
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Directory.CreateDirectory(Global.folderParh);
-                Console.WriteLine("Se accedio a la siguiente ruta de acceso");
-                Console.WriteLine(Global.folderParh + "\\");
-                Console.WriteLine("Ingrese nombre de la carpeta");
-                string carpeta = Console.ReadLine();
-                Console.WriteLine("Se creó la siguiente ruta de acceso");
-                Console.WriteLine(Global.folderParh + "\\" + carpeta + "\\");
-                Console.ForegroundColor = ConsoleColor.White;
-
-            }
-            else
-            {
-                //Si la ruta de acceso existe, se da la opción para eliminar datos o utilizar los mismos
-                Console.WriteLine("Se accedio a la siguiente ruta de acceso y contiene los siguiente datos\n");
-                Console.WriteLine(Global.folderParh + "\\");
-                //se almacena el contenido del directorio en un Array para posteriormente recorrer
-                string[] lita = new string[10];
-                lita = Directory.GetFiles(Global.folderParh);
-                int i = 0;
-                for (i = 0; i < lita.Length; i++)
+                //Crea nuevos elementos dentro del Directorio, el usuario colocará el mismo para Crear el archivo
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                if (crearArchivo.Contains("create file"))
                 {
-                    Console.WriteLine(lita[i].ToString() + "\n");
-                }
-
-                Console.WriteLine("Ingrese nombre de la carpeta");
-                string carpeta = Console.ReadLine();
-                Console.WriteLine("Se creó la siguiente ruta de acceso");
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(Directory.CreateDirectory(Global.folderParh + "\\" + carpeta + "\\"));
-                Console.ForegroundColor = ConsoleColor.White;
-
-                /*bool repetir;
-                //Pregunta para eliminación
-                do
-                {
-                    repetir = false;
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("Se recomienda eliminar la ruta anterior para crear una nueva y evitar problemas de compatibilidad, desea elminar? (si/no)");
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Global<string>.NombreArch = crearArchivo.Substring(12);
+                    Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
+                    StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
+                    sw.Close();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(codSys + "Archivo Creado");
                     Console.ForegroundColor = ConsoleColor.White;
-                    string eliminar = Console.ReadLine();
-                    string patheliminar;
-
-                    switch (eliminar)
-                    {
-                        case "si":
-                            //Si él usuario indica que si, se elmina el contenido del Directorio
-                            for (i = 0; i < lita.Length; i++)
-                            {
-                                File.Delete(lita[i].ToString());
-                            }
-                            Console.ForegroundColor = ConsoleColor.DarkGreen;
-                            //Se elimina el Directorio completo
-                            Directory.Delete(Global.folderParh);
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                            Console.WriteLine("La ruta fue elminada con exito, presione enter para crear una nueva");
-                            string espera = Console.ReadLine();
-                            Console.ForegroundColor = ConsoleColor.White;
-                            //Se crea nuevo Directorio
-                            Directory.CreateDirectory(Global.folderParh);
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                            Console.WriteLine("Se creó la siguiente ruta de acceso");
-                            Console.WriteLine(Global.folderParh + "\\");
-                            Console.ForegroundColor = ConsoleColor.White;
-                            break;
-                        case "no":
-                            //Si el usuario no quiere eliminar el Directorio, se utilizará el mismo
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                            Console.WriteLine("La ruta de acceso que se utilizará es");
-                            Console.WriteLine(Global.folderParh + "\\");
-                            Console.ForegroundColor = ConsoleColor.White;
-                            break;
-                        default:
-                            Console.WriteLine("La opción ingresada no es valida");
-                            repetir = true;
-                            break;
-                    }
-                } while (repetir);
-            }*/
-
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine(codSys + "El archivo que intenta crear no es correcto");
+            }
         }
 
         public static (string cadena, Nodos<Object> ArbolCompleto) CrearVers(string nombreVresion)
         {
-            string[] lista = new string[10];
+            string[] lista = null;
             int tamañoDirec = 0;
-            /*Lista Enlazada para crear Ramas*/
-            Console.ForegroundColor = ConsoleColor.White;
-            Func<Object, Object, bool> MenorQueEntero = (x, y) => Convert.ToUInt64(x.ToString()) < Convert.ToUInt64(y.ToString());
-            Func<Object, Object, bool> MayorQueEntero = (x, y) => Convert.ToUInt64(x.ToString()) > Convert.ToUInt64(y.ToString());
-            lista = Directory.GetFileSystemEntries(Global<string>._pathTexto);
-            tamañoDirec = (Global<string>._pathTexto.Length);
             int i = 0;
             string nuevaCadena = "";
             string nombreArchivo = "";
             ulong nueva = 0;
             string cadena = "";
+            string peso = "";
+            /*Lista Enlazada para crear Ramas*/
+            Console.ForegroundColor = ConsoleColor.White;
+            Func<Object, Object, bool> MenorQueEntero = (x, y) => Convert.ToUInt64(x.ToString()) < Convert.ToUInt64(y.ToString());
+            Func<Object, Object, bool> MayorQueEntero = (x, y) => Convert.ToUInt64(x.ToString()) > Convert.ToUInt64(y.ToString());
+            /*lista = Directory.GetFileSystemEntries(Global<string>._pathTexto);*/
+            DirectoryInfo archivos = new DirectoryInfo(Global<string>._pathTexto);
+            FileInfo[] pesoArchivo = archivos.GetFiles();
+            tamañoDirec = (Global<string>._pathTexto.Length);
+
             Repositorio repositorio;
-            for (i = 0; i < lista.Length; i++)
+            for (i = 0; i < pesoArchivo.Length; i++)
             {
-                nombreArchivo = lista[i].Substring(tamañoDirec).ToString();
-                cadena = ConvertirCadena(lista[i].Substring(tamañoDirec).ToString());
+                /*nombreArchivo = lista[i].Substring(tamañoDirec).ToString();*/
+                nombreArchivo = pesoArchivo[i].ToString();
+                peso = pesoArchivo[i].Length.ToString();
+                cadena = ConvertirCadena(nombreArchivo.ToString());
                 nueva = ulong.Parse(cadena.Substring((cadena.Length)/3, (cadena.Length) / 3));
-                repositorio = new Repositorio(nombreArchivo, cadena,"arbol");
+                repositorio = new Repositorio(nombreArchivo, cadena, peso, cadena);
                 _ = Global<Object>.nodoArbol.Insertar(new Repositorio(nueva), repositorio, MenorQueEntero, MayorQueEntero);
                 nuevaCadena = nuevaCadena+repositorio.ToString();
             }
