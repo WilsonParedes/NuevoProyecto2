@@ -222,10 +222,10 @@ namespace NuevoProyecto2
                         {
                             for(k=1;k< repositorioCompleto.Length; k++)
                             {
-                                for ()
+                                /*for ()
                                 {
 
-                                }
+                                }*/
                                 contenido = contenido + repositorioCompleto[k]+"\n\t\t";
                             }
                             return (listNuevoRepositorio,contenido);
