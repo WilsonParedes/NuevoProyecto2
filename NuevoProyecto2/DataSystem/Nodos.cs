@@ -17,11 +17,6 @@ namespace NuevoProyecto2
         private NodoArbol<T> raiz { get; set; }
         public NodoArbol<T> RaizRepositorio { get; set; }
 
-        public string pathDirectorio()
-        {
-            return Global<string>._path;
-        }
-
         public Nodos()
         {
             primero = null;
@@ -32,9 +27,16 @@ namespace NuevoProyecto2
 
         }
 
+        public string pathDirectorio()
+        {
+            return Global<string>._path;
+        }
+
+        
+
         /*Función que valida si la lista se encuentra vacia, con el fin de determinar si se debe o no
          crear como cabeza de la lista*/
-        public bool validarNodos()
+        public bool validarNodosVersiones()
         {
             bool NodoVacio;
             if (primero == null)
@@ -48,24 +50,50 @@ namespace NuevoProyecto2
         }
 
 
-   
-
         //Método encargado de crear Nodos en la cabeza de la Lista
         public void agregarVersion(T version, Nodos<T> ArbolCompleto)
         {
             NodoVersiones<T> nuevaVersion = new NodoVersiones<T>(version);
-
-
             nuevaVersion.siguiente = primero;
             primero = nuevaVersion;
             enlace = (NodoVersiones<T>)ArbolCompleto;
             
-
-
         }
 
-        //Método que servirá para leer el contendio del txt
+        internal NodoArbol<T> Insertar(T valor, T repositorio, Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            (raiz, RaizRepositorio) = Insertar(raiz, RaizRepositorio, valor, repositorio, MenorQue, MayorQue);
+            return RaizRepositorio;
+        }
 
+
+        public (NodoArbol<T> numero, NodoArbol<T> datoNodo) Insertar(NodoArbol<T> raizSub, NodoArbol<T> reposi, T valor, T repositorio,
+            Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            if (raizSub == null)
+            {
+                raizSub = new NodoArbol<T>
+                { data = valor, izq = null, der = null };
+
+                reposi = new NodoArbol<T>
+                { data = repositorio, izq = null, der = null };
+            }
+            else if (MenorQue(valor, raizSub.data))
+            {
+                (raizSub.izq, reposi.izq) = Insertar(raizSub.izq, reposi.izq, valor, repositorio, MenorQue, MayorQue);
+            }
+            else if (MayorQue(valor, raizSub.data))
+            {
+                (raizSub.der, reposi.der) = Insertar(raizSub.der, reposi.der, valor, repositorio, MenorQue, MayorQue);
+            }
+            else throw new Exception("Nodo duplicado");
+
+
+            return (raizSub, reposi);
+        }
+
+
+        //Método que servirá para leer el contendio del txt
         public string LeerArchivo(string nombretxt)
         {
             string line;
@@ -91,7 +119,7 @@ namespace NuevoProyecto2
 
 
         //Método encargado de recorrer e imprimir la Lista enlazada, según el formato requerito en el documento
-        public void recorre()
+        public void RecorreListaVersiones()
         {
             actual = primero;
             string lista = "";
@@ -108,10 +136,7 @@ namespace NuevoProyecto2
                     Console.WriteLine("\t\t\t\t" + ultimaVersion.contadorauxiliar.ToString().Substring(14) + "\t" + ultimaVersion.fechaapoyo.ToString().Substring(7) +
                         "\t" + ultimaVersion.comentario.ToString().Substring(12) + "\n");
                     actual = actual.siguiente;
-                
-                
             }
-
         }
 
 
@@ -132,6 +157,7 @@ namespace NuevoProyecto2
             return nuevaLista;
 
         }
+
 
         //Este método servirá para comparar el contenido de la última versión, y el contenido del txt
         //por lo que necesita de dos parametros, contenido txt y contenido version ultima
@@ -189,23 +215,15 @@ namespace NuevoProyecto2
         public (string lista, string contenido) BusquedaVersion(string version)
         {
             actual = primero;
-            string listNuevoRepositorio = "";
-            string ListRepositorioCompleto = "";
-            string contenerVersion = "";
-            string ListRepositorioArbol = "";
-            string[] repositorioCompleto = null;
-            string[] nuevoRepositorio = null;
-            string[] RepositorioArbol = null;
+            string listNuevoRepositorio,ListRepositorioCompleto, contenerVersion, ListRepositorioArbol = "";
+            string[] repositorioCompleto, nuevoRepositorio, RepositorioArbol = null;
             string contenido = "";
             while (actual != null)
             {
                 //Se recorre hasta llegar al nodo indico para esto se recorre todo el contenido del nodo, a modo de
                 //obtener el numero de la versión y luego de que coincida, retornar en modo de lista, la información
                 //Del nodo
-                int i = 0;
-                int j = 0;
-                int k = 0;
-                int l = 0;
+                int i, j, k, l = 0;
                 for(i=0; i<1; i++)
                 {
                     ListRepositorioCompleto = actual.dato.ToString();
@@ -230,13 +248,12 @@ namespace NuevoProyecto2
                     actual = actual.siguiente;
                 }
             }
-                
             return (null,null);
         }
 
         //Se utiliza esta función, para llevar el conteo de un nodo para posteriormete buscarlo por index en la lista 
         //enlazada
-        public int obtenerIndice(string version)
+        public int ObtenerIndiceVersiones(string version)
         {
             actual = primero;
             string lista = "";
@@ -280,11 +297,11 @@ namespace NuevoProyecto2
 
         //Esta función realiza la elminación fisica del nodo, recibe por parametros el index extraido por la 
         //Función obtenerIndice
-        public void eliminarNodo(int index)
+        public void EliminaNodoVersiones(int index)
         {
             if (index < 0)
             {
-                Console.WriteLine("La versión no existe");
+                Console.WriteLine(Global<string>._pathTexto + "\\"+"La versión no existe");
             }
             else
             {
@@ -292,7 +309,7 @@ namespace NuevoProyecto2
                 if (index == 0)
                 {
                     primero = primero.siguiente;
-                    Console.WriteLine("Registro eliminado con éxito");
+                    Console.WriteLine(Global<string>._pathTexto + "\\"+"Registro eliminado con éxito");
                 }
                 else
                 {
@@ -308,7 +325,7 @@ namespace NuevoProyecto2
                     //luego de asignar a temporal el nodo anterior al index recibido, se realiza el enlace
                     //al nodo siguiente del siguiente, ingnorando de esta forma el nodo que esta en la posición del index recibido
                     temporal.siguiente = temporal.siguiente.siguiente;
-                    Console.WriteLine("Registro eliminado con éxito");
+                    Console.WriteLine(Global<string>._pathTexto + "\\"+"Registro eliminado con éxito");
 
                 }
             }
@@ -316,60 +333,11 @@ namespace NuevoProyecto2
 
         }
 
-
-        public bool ValidarArbol()
-        {
-            bool NodoVacio;
-            if (raiz == null)
-            {
-                return NodoVacio = true;
-            }
-            else
-            {
-                return NodoVacio = false;
-            }
-        }
-
         /*Función que realiza la creación de un Arbol*/
 
-        internal NodoArbol<T> Insertar(T valor, T repositorio, Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
-        {
-            (raiz, RaizRepositorio) = Insertar(raiz, RaizRepositorio, valor, repositorio, MenorQue, MayorQue);
-            return RaizRepositorio;
-        }
+        
 
-        /*public NodoArbol<T> Insertar(T valor, Repositorio valor2,
-            Func<int, int, bool> MenorQue, Func<int, int, bool> MayorQue)
-        {
-            
-        }*/
-
-        public (NodoArbol<T> numero, NodoArbol<T> datoNodo) Insertar(NodoArbol<T> raizSub, NodoArbol<T> reposi, T valor, T repositorio, 
-            Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
-        {
-            if (raizSub == null)
-            {
-                raizSub = new NodoArbol<T>
-                { data = valor, izq = null, der = null };
-
-                reposi = new NodoArbol<T>
-                { data = repositorio, izq = null, der = null };
-            }
-            else if (MenorQue(valor, raizSub.data))
-            {
-                (raizSub.izq,reposi.izq) = Insertar(raizSub.izq, reposi.izq, valor, repositorio, MenorQue, MayorQue);
-            }
-            else if (MayorQue(valor, raizSub.data))
-            {
-                (raizSub.der, reposi.der) = Insertar(raizSub.der, reposi.der, valor, repositorio, MenorQue, MayorQue);
-            }
-            else throw new Exception("Nodo duplicado");
-
-
-            return (raizSub,reposi);
-        }
-
-        public void eliminarArboles()
+        public void EliminarElContenidoArbol()
         {
             Global<object>.nodoArbol.raiz = null;
             Global<object>.nodoArbol.RaizRepositorio = null;
@@ -384,7 +352,8 @@ namespace NuevoProyecto2
         }
 
 
-
         
+
+
     }
 }

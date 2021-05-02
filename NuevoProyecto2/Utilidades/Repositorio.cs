@@ -19,11 +19,13 @@ namespace NuevoProyecto2
         public string fechaapoyo { get; set; }
         public string separador { get; set; }
 
-        public ulong posicion { get; set; }
+        public double posicion { get; set; }
 
         public string nombreArchivo { get; set; }
         public string pesoArchivo { get; set; }
         public string valorHexa { get; set; }
+
+        public int validarNombrearhc = 0;
 
 
         public Repositorio(string comentario, string contenido)
@@ -53,7 +55,15 @@ namespace NuevoProyecto2
             this.contenido = contenido;
             this.separador = separador;
         }
-        public Repositorio(ulong posicion)
+
+        public Repositorio(string nombreArchivo)
+        {
+            this.nombreArchivo = nombreArchivo;
+            this.validarNombrearhc = validarNombrearhc + 1;
+            this.contador = 1;
+           
+        }
+        public Repositorio(double posicion)
         {
             this.posicion = posicion;
         }
@@ -68,11 +78,15 @@ namespace NuevoProyecto2
             /*Datos Arbol*/
             if (contador <= 0)
             {
-                return $"(" +
+            return $"(" +
                        $"Nombre Archivo: {nombreArchivo}" + "%" +
                        $"Peso Archivo:  {pesoArchivo} " + " kb" + "%"  +
                        $"Fecha: {fecha}" + "%" +
-                       $"Valor Hexa:  { valorHexa}";
+                       $"Valor Hexa:  {valorHexa}";
+            }
+            if (validarNombrearhc>0)
+            {
+                return $"{nombreArchivo}";
             }
             return $"Versión No.:  {contador}" + "%" +
                    $"Fecha: {fecha}" + "%" +
