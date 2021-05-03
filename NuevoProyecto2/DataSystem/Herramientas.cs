@@ -272,7 +272,8 @@ namespace NuevoProyecto2.DataSystem
 
         private int ComparaCarpetaconContenidoVersion(string contenidoLista, FileInfo[] archivosCarpeta)
         {
-            string nombreArchivoCarpeta, ContenidoVersion;
+            string nombreArchivoCarpeta, ContenidoNombreVersion;
+            long pesoArchivoCarpeta, contenidoPesoVersion= 0;
             string[] ArrayContenido;
             string[] AuxiliarArrayContenido;
             int contador = 0;
@@ -280,14 +281,16 @@ namespace NuevoProyecto2.DataSystem
             for (i = 0; i < archivosCarpeta.Length; i++)
             {
                 nombreArchivoCarpeta = archivosCarpeta[i].Name.ToString();
+                pesoArchivoCarpeta = archivosCarpeta[i].Length;
                 ArrayContenido = contenidoLista.Split('|');
                 for (j = 0; j < ArrayContenido.Length - 2; j++)
                 {
                     AuxiliarArrayContenido = ArrayContenido[j].Split('%');
                     for (k = 0; k < 4; k++)
                     {
-                        ContenidoVersion = AuxiliarArrayContenido[0].Substring(16).ToString();
-                        if (nombreArchivoCarpeta.Equals(ContenidoVersion))
+                        ContenidoNombreVersion = AuxiliarArrayContenido[0].Substring(16).ToString();
+                        contenidoPesoVersion =long.Parse(AuxiliarArrayContenido[1].Substring(14));
+                        if ((nombreArchivoCarpeta.Equals(ContenidoNombreVersion))&& (pesoArchivoCarpeta == contenidoPesoVersion))
                         {
                             contador = contador + 1;
                             break;

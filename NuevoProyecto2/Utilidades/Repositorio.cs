@@ -80,9 +80,9 @@ namespace NuevoProyecto2
             {
             return $"(" +
                        $"Nombre Archivo: {nombreArchivo}" + "%" +
-                       $"Peso Archivo:  {pesoArchivo} " + " kb" + "%"  +
+                       $"Peso Archivo: {pesoArchivo}"+ "%"  +
                        $"Fecha: {fecha}" + "%" +
-                       $"Valor Hexa:  {valorHexa}";
+                       $"Valor Hexa:  {valorHexa}"; 
             }
             if (validarNombrearhc>0)
             {
