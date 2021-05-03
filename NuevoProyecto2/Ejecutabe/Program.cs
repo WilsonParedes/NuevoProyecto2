@@ -66,11 +66,11 @@ namespace NuevoProyecto2
                         Console.ForegroundColor = ConsoleColor.White;
                         op = Console.ReadLine();
 
-                        if (op.Contains("create file"))
+                        if (op.Contains("create file "))
                         {
                             Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys,"");
 
-                        } else if (op.Contains("create ver"))
+                        } else if (op.Contains("create ver "))
                         {
 
                             string cadena = "";
@@ -97,7 +97,7 @@ namespace NuevoProyecto2
                             Global<string>.MT.Opciones();
 
                         }
-                        else if (op.Contains("search"))
+                        else if (op.Contains("search "))
                         {
                             //Caso para realizar una busqueda de Versiones, el usuario tendrá la oportunidad de buscar al versión que desee y 
                             //recibir por consola la información completa de la versión
@@ -177,7 +177,7 @@ namespace NuevoProyecto2
                             Global<object>.manejoAr.RecorreListaVersiones(); //Llamada al método Recorrer, este recorre la lista enlazada
                             Console.ForegroundColor = ConsoleColor.White;
                         }
-                        else if (op.Contains("delete"))
+                        else if (op.Contains("delete "))
                         {
                             //Caso para Eliminar una versión, el usuario tendrá la libertad de eliminar todas las versiones que desee
                             string eliminar;
@@ -185,36 +185,14 @@ namespace NuevoProyecto2
                             Global<object>.manejoAr.EliminaNodoVersiones(Global<object>.manejoAr.ObtenerIndiceVersiones(op.Substring(7)) - 1);//Llamada al método ElminarNodo
 
                         }
-                        else if (op.Contains("show tree view"))
+                        else if (op.Contains("show tree view "))
                         {
-                            int cantidad, i, j;
                             string numerobuscar = op.Substring(15);
-                            string nombreArchivoContenidVersion, contenidoLista, VersConte;
-                            string[] AuxiliarArrayContenido;
-                            (nombreArchivoContenidVersion, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(numerobuscar);
-                            (cantidad, VersConte) = Global<object>.MT.DevuelveCantidadArchivosVersion(contenidoLista);
-                            string[] eliminar;
-                            eliminar = Directory.GetFiles(Global<string>._pathTexto);
-                            for (j = 0; j < eliminar.Length; j++)
-                            {
-                                File.Delete(eliminar[j].ToString());
-                            }
-
-                            AuxiliarArrayContenido = VersConte.Split('%');
-                            for (i = 0; i < AuxiliarArrayContenido.Length-1; i++)
-                            {
-                                Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys, AuxiliarArrayContenido[i].Substring(16));
-                            }
-                            string cadenaSinUsar;
-                            Global<bool>.nodoArbol.EliminarElContenidoArbol();
-                            Nodos<object> ArbolCompleto = new Nodos<object>();
-                            (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVers(op,"");
-
-
+                            Global<object>.MT.VisualizacionArbolForm(numerobuscar, op);
+                            
                             Form1 formulario = new Form1();
                             formulario.DevuelveVersion(numerobuscar);
                             Application.EnableVisualStyles();
-                            /*Application.SetCompatibleTextRenderingDefault(false);*/
                             Application.Run(new Form1());
                         }
                         else

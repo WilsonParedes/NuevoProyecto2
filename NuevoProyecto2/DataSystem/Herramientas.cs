@@ -328,5 +328,40 @@ namespace NuevoProyecto2.DataSystem
             FileInfo[] pesoArchivo = archivos.GetFiles();
             return pesoArchivo;
         }
+
+        public void VisualizacionArbolForm(string numerobuscar, string op)
+        {
+            int cantidad,j;
+            string nombreArchivoContenidVersion, contenidoLista, VersConte, cadenaSinUsar;
+            (nombreArchivoContenidVersion, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(numerobuscar);
+            (cantidad, VersConte) = Global<object>.MT.DevuelveCantidadArchivosVersion(contenidoLista);
+            EliminarArchivosdelDirectorio();
+            Global<bool>.nodoArbol.EliminarElContenidoArbol();
+            CrearArchivosenDirectoriodeUnaVersion(VersConte, op);
+            Nodos<object> ArbolCompleto = new Nodos<object>();
+            (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVers(op, "");
+
+        }
+
+        private void EliminarArchivosdelDirectorio()
+        {
+            int i;
+            string[] eliminar;
+            eliminar = Directory.GetFiles(Global<string>._pathTexto);
+            for (i = 0; i < eliminar.Length; i++)
+            {
+                File.Delete(eliminar[i].ToString());
+            }
+        }
+
+        private void CrearArchivosenDirectoriodeUnaVersion(string VersConte, string op) {
+            string[] AuxiliarArrayContenido;
+            int i = 0;
+            AuxiliarArrayContenido = VersConte.Split('%');
+            for (i = 0; i < AuxiliarArrayContenido.Length - 1; i++)
+            {
+                Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys, AuxiliarArrayContenido[i].Substring(16));
+            }
+        }
     }
 }
