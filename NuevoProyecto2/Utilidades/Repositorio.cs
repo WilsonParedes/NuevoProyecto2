@@ -43,6 +43,7 @@ namespace NuevoProyecto2
             this.nombreArchivo = nombreArchivo;
             this.pesoArchivo = pesoArchivo;
             this.fecha = DateTime.Now.ToString();
+            this.contenido = contenido;
             this.valorHexa = valorHexa;
         }
 
@@ -82,7 +83,8 @@ namespace NuevoProyecto2
                        $"Nombre Archivo: {nombreArchivo}" + "%" +
                        $"Peso Archivo: {pesoArchivo}"+ "%"  +
                        $"Fecha: {fecha}" + "%" +
-                       $"Valor Hexa:  {valorHexa}"; 
+                       $"Valor Hexa:  {valorHexa}" + "%" +
+                       $"Contenido archivo: {contenido}"; 
             }
             if (validarNombrearhc>0)
             {

@@ -95,13 +95,9 @@ namespace NuevoProyecto2.DataSystem
         public (string cadena, Nodos<Object> ArbolCompleto) CrearVers(string nombreVresion, string identificador) 
         {
             string[] lista = null;
-            int tamañoDirec = 0;
-            int i = 0;
-            string nuevaCadena = "";
-            string nombreArchivo = "";
+            int tamañoDirec=0, i= 0;
+            string nuevaCadena="", nombreArchivo="", cadena="", peso = "", extensiónArchivo="",contenidoArchivo="";
             ulong nueva = 0;
-            string cadena = "";
-            string peso = "";
             /*Lista Enlazada para crear Ramas*/
             Console.ForegroundColor = ConsoleColor.White;
             Func<Object, Object, bool> MenorQueEntero = (x, y) => Convert.ToDouble(x.ToString()) < Convert.ToDouble(y.ToString());
@@ -117,11 +113,21 @@ namespace NuevoProyecto2.DataSystem
                     try
                     {
                         /*nombreArchivo = lista[i].Substring(tamañoDirec).ToString();*/
+                        extensiónArchivo= pesoArchivo[i].Extension.ToString();
                         nombreArchivo = pesoArchivo[i].ToString();
                         peso = pesoArchivo[i].Length.ToString();
                         cadena = ConvertirCadena(nombreArchivo.ToString());
                         double num = Convert.ToDouble(cadena.ToString());
-                        repositorio = new Repositorio(nombreArchivo, cadena, peso, cadena);
+                        
+                        if (!extensiónArchivo.Equals(".txt"))
+                        {
+                            contenidoArchivo = "El archivo no soporta contenido";
+                        }
+                        else
+                        {
+                            contenidoArchivo = Global<object>.manejoAr.LeerArchivo(nombreArchivo);
+                        }
+                        repositorio = new Repositorio(nombreArchivo, contenidoArchivo, peso, cadena);
                         _ = Global<Object>.nodoArbol.Insertar(new Repositorio(num), repositorio, MenorQueEntero, MayorQueEntero);
                         nuevaCadena = nuevaCadena + repositorio.ToString();
                     }
@@ -190,23 +196,12 @@ namespace NuevoProyecto2.DataSystem
             {
                 FileInfo[] archivosCarpeta = ArchivosDirectorio();
                 int ultimaVersion = Global<object>.manejoAr.DevueveCorrelativoVersion();
-                string nombreArchivoCarpeta, nombreArchivoContenidVersion, contenidoLista, ContenidoVersion;
-                string[] ArrayContenido = null;
-                string[] AuxiliarArrayContenido = null;
+                string nombreArchivoContenidVersion, contenidoLista;
                 (nombreArchivoContenidVersion, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(ultimaVersion.ToString());
-                bool sincoincidencia = false;
-                int i, j, k;
-
                 int cantidad = 0;
                 string VersConte = "";
                 (cantidad, VersConte) = DevuelveCantidadArchivosVersion(contenidoLista);
                 int coincidencias = ComparaCarpetaconContenidoVersion(contenidoLista, archivosCarpeta);
-                if (cantidad == 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine(Global<string>._pathTexto + "\\" + "Debe crear un archivo en la carpeta de origen, utilice comand --dir-- para ayuda");
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
                 if (cantidad != archivosCarpeta.Length)
                 {
                     Global<object>.manejoAr.agregarVersion(new Repositorio(nombreVers.Substring(11), contenidoCadena), ArbolCompleto);
@@ -255,7 +250,7 @@ namespace NuevoProyecto2.DataSystem
             }
             else
             {
-                if (contenidoCadena!=null)
+                if (contenidoCadena!="")
                 {
                     //Si la Lista enlazada se encuentra vacía, se procede a crear un Nodo Cabeza
                     Global<object>.manejoAr.agregarVersion(new Repositorio(nombreVers.Substring(11), contenidoCadena), ArbolCompleto);
@@ -263,6 +258,14 @@ namespace NuevoProyecto2.DataSystem
                     Console.WriteLine(Global<string>._pathTexto + "\\" + "Se almacenó el nodo exitosamente");
                     Console.ForegroundColor = ConsoleColor.White;
                 }
+                else 
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine(Global<string>._pathTexto + "\\" + "No se puede crear una versión, debe existir al menos 1 archivo en el directorio");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                
+                   
             }
 
         }
@@ -272,8 +275,9 @@ namespace NuevoProyecto2.DataSystem
 
         private int ComparaCarpetaconContenidoVersion(string contenidoLista, FileInfo[] archivosCarpeta)
         {
-            string nombreArchivoCarpeta, ContenidoNombreVersion;
-            long pesoArchivoCarpeta, contenidoPesoVersion= 0;
+            string nombreArchivoCarpeta, ContenidoNombreVersion, contenidodelaVersionanterior, contenidoActualdelArchivo, extensiónArchivo;
+            bool coincidencia = false;
+            long pesoArchivoCarpeta, contenidoPesoVersion;
             string[] ArrayContenido;
             string[] AuxiliarArrayContenido;
             int contador = 0;
@@ -282,15 +286,27 @@ namespace NuevoProyecto2.DataSystem
             {
                 nombreArchivoCarpeta = archivosCarpeta[i].Name.ToString();
                 pesoArchivoCarpeta = archivosCarpeta[i].Length;
+                extensiónArchivo = archivosCarpeta[i].Extension.ToString();
+                if (!extensiónArchivo.Equals(".txt"))
+                {
+                    contenidoActualdelArchivo = "El archivo no soporta contenido\n";
+                }
+                else
+                {
+                    contenidoActualdelArchivo = Global<object>.manejoAr.LeerArchivo(nombreArchivoCarpeta);
+                }
+                
                 ArrayContenido = contenidoLista.Split('|');
                 for (j = 0; j < ArrayContenido.Length - 2; j++)
                 {
                     AuxiliarArrayContenido = ArrayContenido[j].Split('%');
-                    for (k = 0; k < 4; k++)
+                    for (k = 0; k < 5; k++)
                     {
                         ContenidoNombreVersion = AuxiliarArrayContenido[0].Substring(16).ToString();
                         contenidoPesoVersion =long.Parse(AuxiliarArrayContenido[1].Substring(14));
-                        if ((nombreArchivoCarpeta.Equals(ContenidoNombreVersion))&& (pesoArchivoCarpeta == contenidoPesoVersion))
+                        contenidodelaVersionanterior = AuxiliarArrayContenido[4].Substring(19).ToString();
+                        coincidencia = Global<object>.manejoAr.CompararContenido(contenidodelaVersionanterior, contenidoActualdelArchivo);
+                        if ((nombreArchivoCarpeta.Equals(ContenidoNombreVersion))&& (pesoArchivoCarpeta == contenidoPesoVersion)&&(coincidencia))
                         {
                             contador = contador + 1;
                             break;

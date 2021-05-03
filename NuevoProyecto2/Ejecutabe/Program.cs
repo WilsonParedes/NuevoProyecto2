@@ -128,7 +128,7 @@ namespace NuevoProyecto2
                                 {
 
                                     AuxiliarArrayContenido = ArrayContenido[k].Split('%');
-                                    for (l = 0; l < 4; l++)
+                                    for (l = 0; l < 5; l++)
                                     {
                                         nuevocontenidoLista = nuevocontenidoLista + AuxiliarArrayContenido[l] + "\n\t\t";
                                     }

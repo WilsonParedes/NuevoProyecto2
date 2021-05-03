@@ -100,7 +100,7 @@ namespace NuevoProyecto2
             string conten = "";
             try
             {
-                StreamReader sr = new StreamReader(Global<string>._path + nombretxt);
+                StreamReader sr = new StreamReader(Global<string>._pathTexto + nombretxt);
                 line = sr.ReadLine();
                 while (line != null)
                 {
