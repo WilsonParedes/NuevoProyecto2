@@ -104,7 +104,7 @@ namespace NuevoProyecto2
                 line = sr.ReadLine();
                 while (line != null)
                 {
-                    conten = conten + "\n" + line;
+                    conten = conten + line + "\n";
                     line = sr.ReadLine();
                 }
                 sr.Close();
@@ -216,7 +216,7 @@ namespace NuevoProyecto2
         {
             actual = primero;
             string listNuevoRepositorio,ListRepositorioCompleto, contenerVersion, ListRepositorioArbol = "";
-            string[] repositorioCompleto, nuevoRepositorio, RepositorioArbol = null;
+            string[] repositorioCompleto, nuevoRepositorio, RepositorioArbol;
             string contenido = "";
             while (actual != null)
             {
@@ -239,7 +239,7 @@ namespace NuevoProyecto2
                             for(k=1;k< repositorioCompleto.Length; k++)
                             {
                                 
-                                contenido = contenido + repositorioCompleto[k]+"\n"+"|";
+                                contenido = contenido + repositorioCompleto[k]+"|";
                             }
                             return (listNuevoRepositorio,contenido);
                             break;

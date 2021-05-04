@@ -28,7 +28,7 @@ namespace NuevoProyecto2.DataSystem
 
         //Método para crear directorio general
         /*Es invocado por la opción "init" en Program*/
-        public bool CreacionDirectorio(string pathUsuario, string nombreCarpeta, string codSys)
+        public bool CrearDirectorio(string pathUsuario, string nombreCarpeta, string codSys)
         {
 
             bool repetir = false;
@@ -61,37 +61,43 @@ namespace NuevoProyecto2.DataSystem
 
         /*Método encargado de crear archivos en el directorio especificado por el usuario*/
         /*Es invocado por CrearArchivosenDirectoriodeUnaVersion y la opción "create file " en Program*/
-        public void CrearArchivosEnDirectorio(string crearArchivo, string codSys, string cadena)
+        public void CrearArchivosEnDirectorio(string op, string codSys, string nombreArchivo,string contenidoArchivo)
         {
             try
             {
                 //Crea nuevos elementos dentro del Directorio, el usuario colocará el mismo para Crear el archivo
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                if (crearArchivo.Contains("create file"))
+                if (op.Contains("create file"))
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Global<string>.NombreArch = crearArchivo.Substring(12);
+                    Global<string>.NombreArch = op.Substring(12);
                     Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
                     StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
                     sw.Close();
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(Global<string>._pathTexto + "\\"+ "Archivo Creado");
                     Console.ForegroundColor = ConsoleColor.White;
-                }else if(crearArchivo.Contains("show tree view"))
+                }else if(op.Contains("show tree view"))
 
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Global<string>.NombreArch = cadena;
+                    Global<string>.NombreArch = nombreArchivo;
                     Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
                     StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
                     sw.Close();
-                }else if (crearArchivo.Contains("search"))
+                }else if (op.Contains("search"))
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Global<string>.NombreArch = cadena;
+                    Global<string>.NombreArch = nombreArchivo;
                     Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
                     StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
                     sw.Close();
+                    string[] nombreauxiliar = nombreArchivo.Split('.');
+                    if (nombreauxiliar[1].Equals("txt"))
+                    {
+                        EscribeContenidoEnLosTXT(contenidoArchivo);
+                    }
+                    
                 }
             }
             catch (FileNotFoundException)
@@ -102,7 +108,7 @@ namespace NuevoProyecto2.DataSystem
 
         /*Método encargado de crear un árbol y posteriormente crear nodos dentro de ese arbol binario de busqueda*/
         /*Es invocado por 2 métodos VisualizacionArbolForm y la opción de "crear ver" en Program*/
-        public (string cadena, Nodos<Object> ArbolCompleto) CrearVers(string nombreVresion, string identificador) 
+        public (string cadena, Nodos<Object> ArbolCompleto) CrearVersionenArbol(string nombreVresion, string identificador) 
         {
             string[] lista = null;
             int tamañoDirec=0, i= 0;
@@ -125,7 +131,7 @@ namespace NuevoProyecto2.DataSystem
                         extensiónArchivo= pesoArchivo[i].Extension.ToString();
                         nombreArchivo = pesoArchivo[i].ToString();
                         peso = pesoArchivo[i].Length.ToString();
-                        cadena = ConvertirCadena(nombreArchivo.ToString());
+                        cadena = ConvertirCadenaaHexa(nombreArchivo.ToString());
                         double num = Convert.ToDouble(cadena.ToString());
                         
                         if (!extensiónArchivo.Equals(".txt"))
@@ -158,7 +164,7 @@ namespace NuevoProyecto2.DataSystem
                     {
                         nombreArchivo = pesoArchivo[i].ToString();
                         peso = pesoArchivo[i].Length.ToString();
-                        cadena = ConvertirCadena(nombreArchivo.ToString());
+                        cadena = ConvertirCadenaaHexa(nombreArchivo.ToString());
                         double num = Convert.ToDouble(cadena.ToString());
                         repositorio = new Repositorio(nombreArchivo);
                         _ = Global<Object>.nodoArbol.Insertar(new Repositorio(num), repositorio, MenorQueEntero, MayorQueEntero);
@@ -180,7 +186,7 @@ namespace NuevoProyecto2.DataSystem
 
         /*Método encarado de convertir el nombre del archivo en formato Hexadecimal*/
         /*Es invocado por un método en Herramientas.CrearVers*/
-        private static string ConvertirCadena(string cadena)
+        private static string ConvertirCadenaaHexa(string cadena)
         {
 
             StringBuilder sb = new StringBuilder();
@@ -197,7 +203,7 @@ namespace NuevoProyecto2.DataSystem
 
         /*Método encargado de crear los nodos en la lista enlazada*/
         /*Es invocado por la opción "crear ver " en Program*/
-        public void CrearNodoListaEnlazada(string contenidoCadena, string nombreVers, Nodos<object> ArbolCompleto)
+        public void CrearVersionEnListaEnlazada(string contenidoCadena, string nombreVers, Nodos<object> ArbolCompleto)
         {
 
             /*Se agregó este nuevo bloque de if para validar si se almacenará o no un nodo*/
@@ -205,11 +211,11 @@ namespace NuevoProyecto2.DataSystem
             {
                 FileInfo[] archivosCarpeta = ArchivosDirectorio();
                 int ultimaVersion = Global<object>.manejoAr.DevueveCorrelativoVersion();
-                string nombreArchivoContenidVersion, contenidoLista;
+                string nombreArchivoContenidVersion, contenidoLista, contenidoVersion;
                 (nombreArchivoContenidVersion, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(ultimaVersion.ToString());
                 int cantidad = 0;
                 string VersConte = "";
-                (cantidad, VersConte) = DevuelveCantidadArchivosVersion(contenidoLista);
+                (cantidad, VersConte, contenidoVersion) = DevuelveCantidadArchivosVersion(contenidoLista);
                 int coincidencias = ComparaCarpetaconContenidoVersion(contenidoLista, archivosCarpeta);
                 if (cantidad != archivosCarpeta.Length)
                 {
@@ -281,7 +287,7 @@ namespace NuevoProyecto2.DataSystem
                 extensiónArchivo = archivosCarpeta[i].Extension.ToString();
                 if (!extensiónArchivo.Equals(".txt"))
                 {
-                    contenidoActualdelArchivo = "El archivo no soporta contenido\n";
+                    contenidoActualdelArchivo = "El archivo no soporta contenido";
                 }
                 else
                 {
@@ -313,13 +319,13 @@ namespace NuevoProyecto2.DataSystem
         /*Devuelve en número, la cantidad de arhcivos que fueron almacenados en la versión*/
         /*Devuelve la cantidad de archivos que fueron almacenados en la versión*/
         /*Método invocado por Herramientas.CrearNodoListaEnlazada y Herramientas.VisualizacionArbolForm*/
-        public (int canti, string conVers)  DevuelveCantidadArchivosVersion(string contenidoLista)
+        public (int canti, string conVers,string contenidoVersion)  DevuelveCantidadArchivosVersion(string contenidoLista)
         {
             int cantidad = 0;
             int i,j;
             string[] ArrayContenido;
             string[] AuxiliarArrayContenido;
-            string ContenidoVersion="";
+            string nombreVersion = "", contenidoVersion = ""; 
             ArrayContenido = contenidoLista.Split('|');
             for (i = 0; i < ArrayContenido.Length - 2; i++)
             {
@@ -327,11 +333,12 @@ namespace NuevoProyecto2.DataSystem
                 for (j = 0; j < 1; j++)
                 {
                     cantidad = cantidad +1;
-                    ContenidoVersion += AuxiliarArrayContenido[0].ToString()+"%";
+                    nombreVersion += AuxiliarArrayContenido[0].ToString()+"%";
+                    contenidoVersion += AuxiliarArrayContenido[4].Substring(19).ToString() + "%";
 
                 }
             }
-            return (cantidad, ContenidoVersion);
+            return (cantidad, nombreVersion, contenidoVersion);
         }
 
         /*Devuelve todos los archivos que se encuentran dentro del Path*/
@@ -350,21 +357,21 @@ namespace NuevoProyecto2.DataSystem
         public void VisualizacionArbolForm(string numerobuscar, string op)
         {
             int cantidad,j;
-            string nombreArchivoContenidVersion, contenidoLista, VersConte, cadenaSinUsar;
+            string nombreArchivoContenidVersion, contenidoLista, VersConte, cadenaSinUsar, contenidoVersion;
             (nombreArchivoContenidVersion, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(numerobuscar);
-            (cantidad, VersConte) = Global<object>.MT.DevuelveCantidadArchivosVersion(contenidoLista);
+            (cantidad, VersConte, contenidoVersion) = Global<object>.MT.DevuelveCantidadArchivosVersion(contenidoLista);
             EliminarArchivosdelDirectorio();
             Global<bool>.nodoArbol.EliminarElContenidoArbol();
-            CrearArchivosenDirectoriodeUnaVersion(VersConte, op);
+            CrearArchivosenDirectoriodeUnaVersion(VersConte, op,"");
             Nodos<object> ArbolCompleto = new Nodos<object>();
-            (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVers(op, "");
+            (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVersionenArbol(op, "");
 
         }
 
         public void OpcionBusqueda(string op)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            string nuevaLista, contenidoLista, nuevocontenidoLista, VersConte;
+            string nuevaLista, contenidoLista, nuevocontenidoLista, VersConte, contenidoVersion;
             string[] ArrayContenido;
             int cantidad;
             (nuevaLista, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(op.Substring(7));//Llamada al método que realiza la busqueda
@@ -377,14 +384,14 @@ namespace NuevoProyecto2.DataSystem
             {
                 throw new NullReferenceException();
             }
-            (cantidad, VersConte) = DevuelveCantidadArchivosVersion(contenidoLista);
+            (cantidad, VersConte, contenidoVersion) = DevuelveCantidadArchivosVersion(contenidoLista);
 
             /*arregla el formato del contenido almacenado en el árbol*/
             nuevocontenidoLista = ArreglaContenidodelaVersion(ArrayContenido);
             //Método que ayudará a imprimir los datos de la versión obtenida por el método BusquedaVersion
             ImprimelosDatosdeLaVersion(nuevaLista, nuevocontenidoLista);
             EliminarArchivosdelDirectorio();
-            CrearArchivosenDirectoriodeUnaVersion(VersConte, op);
+            CrearArchivosenDirectoriodeUnaVersion(VersConte, op, contenidoVersion);
         }
 
 
@@ -430,6 +437,7 @@ namespace NuevoProyecto2.DataSystem
             int i,j;
             string[] AuxiliarArrayContenido;
             string nuevocontenidoLista = "";
+            string contenidVersion = "";
             for (i = 0; i < ArrayContenido.Length - 2; i++)
             {
 
@@ -437,7 +445,9 @@ namespace NuevoProyecto2.DataSystem
                 for (j = 0; j < 5; j++)
                 {
                     nuevocontenidoLista = nuevocontenidoLista + AuxiliarArrayContenido[j] + "\n\t\t";
+                  
                 }
+                nuevocontenidoLista = nuevocontenidoLista + "\n\t\t";
             }
             return nuevocontenidoLista;
         }
@@ -458,14 +468,32 @@ namespace NuevoProyecto2.DataSystem
 
         /*Método encargado de crear todos los archivos que se encuentran en el contenido de la versión dentro del directorio establecido*/
         /*Método invocado por Herramientas.VisualizacionArbolForm*/
-        private void CrearArchivosenDirectoriodeUnaVersion(string VersConte, string op) {
-            string[] AuxiliarArrayContenido;
+        private void CrearArchivosenDirectoriodeUnaVersion(string VersConte, string op, string contenidoVersion) {
+            string[] AuxiliarArrayNombre, AuxiliarArrayContenido;
             int i = 0;
-            AuxiliarArrayContenido = VersConte.Split('%');  
-            for (i = 0; i < AuxiliarArrayContenido.Length - 1; i++)
+            if (op.Contains("show tree view "))
             {
-                Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys, AuxiliarArrayContenido[i].Substring(16));
+                AuxiliarArrayNombre = VersConte.Split('%');
+                for (i = 0; i < AuxiliarArrayNombre.Length - 1; i++)
+                {
+
+                    Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys, AuxiliarArrayNombre[i].Substring(16), "");
+                }
             }
+            AuxiliarArrayNombre = VersConte.Split('%');
+            AuxiliarArrayContenido = contenidoVersion.Split('%');
+            for (i = 0; i < AuxiliarArrayNombre.Length - 1; i++)
+            {
+                
+                Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys, AuxiliarArrayNombre[i].Substring(16), AuxiliarArrayContenido[i]);
+            }
+        }
+
+        private void EscribeContenidoEnLosTXT(string contendioArchivo)
+        {
+            StreamWriter escribirTXT = new StreamWriter(Global<string>.nuevoPath);
+            escribirTXT.Write(contendioArchivo);
+            escribirTXT.Close();
         }
     }
 }

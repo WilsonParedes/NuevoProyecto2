@@ -49,7 +49,7 @@ namespace NuevoProyecto2
                 {
                     try
                     {
-                        repetir = Global<bool>.MT.CreacionDirectorio(inicializar.Substring(5), nombreCarpeta, Global<string>.codSys);
+                        repetir = Global<bool>.MT.CrearDirectorio(inicializar.Substring(5), nombreCarpeta, Global<string>.codSys);
                     }
                     catch (ArgumentOutOfRangeException t)
                     {
@@ -68,7 +68,7 @@ namespace NuevoProyecto2
 
                         if (op.Contains("create file "))
                         {
-                            Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys,"");
+                            Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys,"","");
 
                         } else if (op.Contains("create ver "))
                         {
@@ -76,8 +76,8 @@ namespace NuevoProyecto2
                             string cadena = "";
                             Global<bool>.nodoArbol.EliminarElContenidoArbol();
                             Nodos<Object> ArbolCompleto = new Nodos<Object>();
-                            (cadena, ArbolCompleto) = Global<object>.MT.CrearVers(op,"crear");
-                            Global<object>.MT.CrearNodoListaEnlazada(cadena, op, ArbolCompleto);
+                            (cadena, ArbolCompleto) = Global<object>.MT.CrearVersionenArbol(op,"crear");
+                            Global<object>.MT.CrearVersionEnListaEnlazada(cadena, op, ArbolCompleto);
 
                         }
                         else if (op.Equals("read"))
@@ -104,28 +104,7 @@ namespace NuevoProyecto2
                             try
                             {
                                 Global<object>.MT.OpcionBusqueda(op);
-                                /*Console.ForegroundColor = ConsoleColor.White;
-                                string nuevaLista , contenidoLista, nuevocontenidoLista, VersConte;
-                                string[] ArrayContenido;
-                                int cantidad;
-                                (nuevaLista, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(op.Substring(7));//Llamada al método que realiza la busqueda
-                              
-                                if (contenidoLista != null)
-                                {
-                                    ArrayContenido = contenidoLista.Split('|');
-                                }
-                                else
-                                {
-                                    throw new NullReferenceException();
-                                }
-                                (cantidad, VersConte) = Global<object>.MT.DevuelveCantidadArchivosVersion(contenidoLista);
                                 
-                                /*arregla el formato del contenido almacenado en el árbol
-                                nuevocontenidoLista = Global<object>.MT.ArreglaContenidodelaVersion(ArrayContenido);
-                                //Método que ayudará a imprimir los datos de la versión obtenida por el método BusquedaVersion
-                                Global<object>.MT.ImprimelosDatosdeLaVersion(nuevaLista, nuevocontenidoLista);
-                                Global<object>.MT.EliminarArchivosdelDirectorio();*/
-
                             }
                             catch (NullReferenceException)
                             {
