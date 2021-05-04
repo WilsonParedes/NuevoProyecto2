@@ -103,19 +103,13 @@ namespace NuevoProyecto2
                             //recibir por consola la información completa de la versión
                             try
                             {
-                                string version;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                string nuevaLista = "";
-                                string contenidoLista = "";
-                                string[] ArrayContenido = null;
-                                string nuevocontenidoLista = "";
-                                string[] AuxiliarArrayContenido = null;
-                                string AuxiliarnuevocontenidoLista = "";
+                                Global<object>.MT.OpcionBusqueda(op);
+                                /*Console.ForegroundColor = ConsoleColor.White;
+                                string nuevaLista , contenidoLista, nuevocontenidoLista, VersConte;
+                                string[] ArrayContenido;
+                                int cantidad;
                                 (nuevaLista, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(op.Substring(7));//Llamada al método que realiza la busqueda
-                                int j = 0;
-                                int k = 0;
-                                int l = 0;
-                                /*For para arreglar el formato del contenido almacenado en el árbol*/
+                              
                                 if (contenidoLista != null)
                                 {
                                     ArrayContenido = contenidoLista.Split('|');
@@ -124,42 +118,14 @@ namespace NuevoProyecto2
                                 {
                                     throw new NullReferenceException();
                                 }
-                                for (k = 0; k < ArrayContenido.Length - 2; k++)
-                                {
+                                (cantidad, VersConte) = Global<object>.MT.DevuelveCantidadArchivosVersion(contenidoLista);
+                                
+                                /*arregla el formato del contenido almacenado en el árbol
+                                nuevocontenidoLista = Global<object>.MT.ArreglaContenidodelaVersion(ArrayContenido);
+                                //Método que ayudará a imprimir los datos de la versión obtenida por el método BusquedaVersion
+                                Global<object>.MT.ImprimelosDatosdeLaVersion(nuevaLista, nuevocontenidoLista);
+                                Global<object>.MT.EliminarArchivosdelDirectorio();*/
 
-                                    AuxiliarArrayContenido = ArrayContenido[k].Split('%');
-                                    for (l = 0; l < 5; l++)
-                                    {
-                                        nuevocontenidoLista = nuevocontenidoLista + AuxiliarArrayContenido[l] + "\n\t\t";
-                                    }
-                                }
-                                //El if y for ayudarán a imprimir los datos de la versión obtenida por el método BusquedaVersion
-                                if (nuevaLista != null)
-                                {
-                                    string[] nuevoArreglo = nuevaLista.Split('%');
-                                    for (j = 0; j < 1; j++)
-                                    {
-                                        Repositorio ultimaVersion = new Repositorio(nuevoArreglo[0], nuevoArreglo[1], nuevoArreglo[2], nuevoArreglo[3], "/");
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                        Console.WriteLine("\t\n            DATOS ALMACENADOS DE LA VERSIÓN");
-                                        Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                        Console.WriteLine("\t" + ultimaVersion.contadorauxiliar.ToString());
-                                        Console.WriteLine("\t" + ultimaVersion.fechaapoyo.ToString());
-                                        Console.WriteLine("\t" + ultimaVersion.comentario.ToString());
-                                        Console.WriteLine("\t" + "Contenido de la capeta: \n");
-                                        Console.ForegroundColor = ConsoleColor.DarkGreen;
-                                        Console.WriteLine("\t\t" + nuevocontenidoLista);
-                                        Console.ForegroundColor = ConsoleColor.White;
-
-                                    }
-                                }
-                                else
-                                {
-                                    //Si la versión no existe, envia un mensaje de información
-                                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                                    Console.WriteLine(Global<string>._pathTexto + "\\" + "LA VERSIÓN NO EXISTE");
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                }
                             }
                             catch (NullReferenceException)
                             {
