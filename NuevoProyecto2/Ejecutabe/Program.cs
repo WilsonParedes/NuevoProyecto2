@@ -132,13 +132,22 @@ namespace NuevoProyecto2
                         }
                         else if (op.Contains("show tree view "))
                         {
-                            string numerobuscar = op.Substring(15);
-                            Global<object>.MT.VisualizacionArbolForm(numerobuscar, op);
+                            try
+                            {
+                                string numerobuscar = op.Substring(15);
+                                Global<object>.MT.VisualizacionArbolForm(numerobuscar, op);
+                                Form1 formulario = new Form1();
+                                formulario.DevuelveVersion(numerobuscar);
+                                Application.EnableVisualStyles();
+                                Application.Run(new Form1());
+                            }
+                            catch
+                            {
+
+                            }
                             
-                            Form1 formulario = new Form1();
-                            formulario.DevuelveVersion(numerobuscar);
-                            Application.EnableVisualStyles();
-                            Application.Run(new Form1());
+                            
+                            
                         }
                         else
                         {
