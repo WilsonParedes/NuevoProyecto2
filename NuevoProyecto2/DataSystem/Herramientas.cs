@@ -318,7 +318,7 @@ namespace NuevoProyecto2.DataSystem
 
         /*Devuelve en número, la cantidad de arhcivos que fueron almacenados en la versión*/
         /*Devuelve la cantidad de archivos que fueron almacenados en la versión*/
-        /*Método invocado por Herramientas.CrearNodoListaEnlazada y Herramientas.VisualizacionArbolForm*/
+        /*Método invocado por Herramientas.CrearNodoListaEnlazada, Herramientas.VisualizacionArbolForm y Herramientas.OpcionBusqueda*/
         public (int canti, string conVers,string contenidoVersion)  DevuelveCantidadArchivosVersion(string contenidoLista)
         {
             int cantidad = 0;
@@ -365,7 +365,6 @@ namespace NuevoProyecto2.DataSystem
             CrearArchivosenDirectoriodeUnaVersion(VersConte, op,"");
             Nodos<object> ArbolCompleto = new Nodos<object>();
             (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVersionenArbol(op, "");
-
         }
 
         public void OpcionBusqueda(string op)
@@ -470,7 +469,7 @@ namespace NuevoProyecto2.DataSystem
         /*Método invocado por Herramientas.VisualizacionArbolForm*/
         private void CrearArchivosenDirectoriodeUnaVersion(string VersConte, string op, string contenidoVersion) {
             string[] AuxiliarArrayNombre, AuxiliarArrayContenido;
-            int i = 0;
+            int i;
             if (op.Contains("show tree view "))
             {
                 AuxiliarArrayNombre = VersConte.Split('%');
@@ -480,13 +479,17 @@ namespace NuevoProyecto2.DataSystem
                     Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys, AuxiliarArrayNombre[i].Substring(16), "");
                 }
             }
-            AuxiliarArrayNombre = VersConte.Split('%');
-            AuxiliarArrayContenido = contenidoVersion.Split('%');
-            for (i = 0; i < AuxiliarArrayNombre.Length - 1; i++)
+            else
             {
-                
-                Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys, AuxiliarArrayNombre[i].Substring(16), AuxiliarArrayContenido[i]);
+                AuxiliarArrayNombre = VersConte.Split('%');
+                AuxiliarArrayContenido = contenidoVersion.Split('%');
+                for (i = 0; i < AuxiliarArrayNombre.Length - 1; i++)
+                {
+
+                    Global<object>.MT.CrearArchivosEnDirectorio(op, Global<string>.codSys, AuxiliarArrayNombre[i].Substring(16), AuxiliarArrayContenido[i]);
+                }
             }
+            
         }
 
         private void EscribeContenidoEnLosTXT(string contendioArchivo)
