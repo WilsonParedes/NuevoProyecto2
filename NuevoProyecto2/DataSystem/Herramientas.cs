@@ -21,7 +21,7 @@ namespace NuevoProyecto2.DataSystem
             Console.WriteLine("create ver       <Nombre Versión>:    Crea un versión de la ruta de acceso");
             Console.WriteLine("binnacle:                             Bitacora de Registros del Repositorio");
             Console.WriteLine("delete           <Número Versión>:    Borra una versión del Repositorio");
-            Console.WriteLine("delete rm        <Nombre Archivo>     Borra el archivo especificado de la última versión");
+            Console.WriteLine("remove arch      <Nombre Archivo>:    Borra el archivo especificado de la última versión");
             Console.WriteLine("read:                                 Lee la version actual");
             Console.WriteLine("show tree view   <Número Version>:    Muestra el árbol completo");
         }
@@ -86,8 +86,7 @@ namespace NuevoProyecto2.DataSystem
                     Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
                     StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
                     sw.Close();
-                }else if (op.Contains("search"))
-                {
+                }else if (op.Contains("search")){
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Global<string>.NombreArch = nombreArchivo;
                     Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
@@ -99,6 +98,20 @@ namespace NuevoProyecto2.DataSystem
                         EscribeContenidoEnLosTXT(contenidoArchivo);
                     }
                     
+                }
+                else if (op.Contains("remove arch "))
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Global<string>.NombreArch = nombreArchivo;
+                    Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
+                    StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
+                    sw.Close();
+                    string[] nombreauxiliar = nombreArchivo.Split('.');
+                    if (nombreauxiliar[1].Equals("txt"))
+                    {
+                        EscribeContenidoEnLosTXT(contenidoArchivo);
+                    }
+
                 }
             }
             catch (FileNotFoundException)
@@ -493,7 +506,24 @@ namespace NuevoProyecto2.DataSystem
             
         }
 
-
+        public void RemoverHojadelArbol(string numerobuscar, string op)
+        {
+            int cantidad, j;
+            string nombreArchivoContenidVersion, contenidoLista, VersConte, cadenaSinUsar, contenidoVersion;
+            (nombreArchivoContenidVersion, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(numerobuscar);
+            (cantidad, VersConte, contenidoVersion) = Global<object>.MT.DevuelveCantidadArchivosVersion(contenidoLista);
+            EliminarArchivosdelDirectorio();
+            Global<bool>.nodoArbol.EliminarElContenidoArbol();
+            CrearArchivosenDirectoriodeUnaVersion(VersConte, op, contenidoVersion);
+            Nodos<object> ArbolCompleto = new Nodos<object>();
+            (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVersionenArbol(op, "crear");
+            Func<Object, Object, bool> MenorQueEntero = (x, y) => Convert.ToDouble(x.ToString()) < Convert.ToDouble(y.ToString());
+            Func<Object, Object, bool> MayorQueEntero = (x, y) => Convert.ToDouble(x.ToString()) > Convert.ToDouble(y.ToString());
+            string cadena = ConvertirCadenaaHexa(op.Substring(12).ToString());
+            double num = Convert.ToDouble(cadena.ToString());
+            Global<object>.manejoAr.Eliminar(num, MenorQueEntero, MayorQueEntero);
+            Global<object>.manejoAr.EliminaNodoVersiones(Global<object>.manejoAr.ObtenerIndiceVersiones(numerobuscar));//Llamada al método ElminarNodo
+        }
 
         private void EscribeContenidoEnLosTXT(string contendioArchivo)
         {

@@ -148,9 +148,9 @@ namespace NuevoProyecto2
                             
                             
                             
-                        }else if (op.Contains("delete rm "))
+                        }else if (op.Contains("remove arch "))
                         {
-                            /*Global<object>.MT.VisualizacionArbolForm(Global<object>.manejoAr.DevueveCorrelativoVersion().ToString(), op);*/
+                            Global<object>.MT.RemoverHojadelArbol(Global<object>.manejoAr.DevueveCorrelativoVersion().ToString(), op);
 
                         }
                         else

@@ -32,7 +32,7 @@ namespace NuevoProyecto2
             return Global<string>._path;
         }
 
-        
+
 
         /*Función que valida si la lista se encuentra vacia, con el fin de determinar si se debe o no
          crear como cabeza de la lista*/
@@ -57,7 +57,7 @@ namespace NuevoProyecto2
             nuevaVersion.siguiente = primero;
             primero = nuevaVersion;
             enlace = (NodoVersiones<T>)ArbolCompleto;
-            
+
         }
 
         internal NodoArbol<T> Insertar(T valor, T repositorio, Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
@@ -132,10 +132,10 @@ namespace NuevoProyecto2
                 lista = actual.dato.ToString();
                 nuevoRepositorio = lista.Split('%');
                 ultimaVersion = new Repositorio(nuevoRepositorio[0], nuevoRepositorio[1], nuevoRepositorio[2], nuevoRepositorio[3], nuevoRepositorio[4]);
-                
-                    Console.WriteLine("\t\t\t\t" + ultimaVersion.contadorauxiliar.ToString().Substring(14) + "\t" + ultimaVersion.fechaapoyo.ToString().Substring(7) +
-                        "\t" + ultimaVersion.comentario.ToString().Substring(12) + "\n");
-                    actual = actual.siguiente;
+
+                Console.WriteLine("\t\t\t\t" + ultimaVersion.contadorauxiliar.ToString().Substring(14) + "\t" + ultimaVersion.fechaapoyo.ToString().Substring(7) +
+                    "\t" + ultimaVersion.comentario.ToString().Substring(12) + "\n");
+                actual = actual.siguiente;
             }
         }
 
@@ -215,7 +215,7 @@ namespace NuevoProyecto2
         public (string lista, string contenido) BusquedaVersion(string version)
         {
             actual = primero;
-            string listNuevoRepositorio,ListRepositorioCompleto, contenerVersion, ListRepositorioArbol = "";
+            string listNuevoRepositorio, ListRepositorioCompleto, contenerVersion, ListRepositorioArbol = "";
             string[] repositorioCompleto, nuevoRepositorio, RepositorioArbol;
             string contenido = "";
             while (actual != null)
@@ -224,7 +224,7 @@ namespace NuevoProyecto2
                 //obtener el numero de la versión y luego de que coincida, retornar en modo de lista, la información
                 //Del nodo
                 int i, j, k, l = 0;
-                for(i=0; i<1; i++)
+                for (i = 0; i < 1; i++)
                 {
                     ListRepositorioCompleto = actual.dato.ToString();
                     repositorioCompleto = ListRepositorioCompleto.Split('(');
@@ -236,19 +236,19 @@ namespace NuevoProyecto2
                         contenerVersion = busquedaVersion.contadorauxiliar.Substring(14);
                         if (contenerVersion.Equals(version))
                         {
-                            for(k=1;k< repositorioCompleto.Length; k++)
+                            for (k = 1; k < repositorioCompleto.Length; k++)
                             {
-                                
-                                contenido = contenido + repositorioCompleto[k]+"|";
+
+                                contenido = contenido + repositorioCompleto[k] + "|";
                             }
-                            return (listNuevoRepositorio,contenido);
+                            return (listNuevoRepositorio, contenido);
                             break;
                         }
                     }
                     actual = actual.siguiente;
                 }
             }
-            return (null,null);
+            return (null, null);
         }
 
         //Se utiliza esta función, para llevar el conteo de un nodo para posteriormete buscarlo por index en la lista 
@@ -301,7 +301,7 @@ namespace NuevoProyecto2
         {
             if (index < 0)
             {
-                Console.WriteLine(Global<string>._pathTexto + "\\"+"La versión no existe");
+                Console.WriteLine(Global<string>._pathTexto + "\\" + "La versión no existe");
             }
             else
             {
@@ -309,7 +309,7 @@ namespace NuevoProyecto2
                 if (index == 0)
                 {
                     primero = primero.siguiente;
-                    Console.WriteLine(Global<string>._pathTexto + "\\"+"Registro eliminado con éxito");
+                    Console.WriteLine(Global<string>._pathTexto + "\\" + "Registro eliminado con éxito");
                 }
                 else
                 {
@@ -325,7 +325,7 @@ namespace NuevoProyecto2
                     //luego de asignar a temporal el nodo anterior al index recibido, se realiza el enlace
                     //al nodo siguiente del siguiente, ingnorando de esta forma el nodo que esta en la posición del index recibido
                     temporal.siguiente = temporal.siguiente.siguiente;
-                    Console.WriteLine(Global<string>._pathTexto + "\\"+"Registro eliminado con éxito");
+                    Console.WriteLine(Global<string>._pathTexto + "\\" + "Registro eliminado con éxito");
 
                 }
             }
@@ -335,7 +335,7 @@ namespace NuevoProyecto2
 
         /*Función que realiza la creación de un Arbol*/
 
-        
+
 
         public void EliminarElContenidoArbol()
         {
@@ -348,11 +348,99 @@ namespace NuevoProyecto2
         public string convertirX(Object x)
         {
             return x.ToString();
-             
+
         }
 
-        
-        
+
+
+
+
+        /*Método Eliminar*/
+
+        public void Eliminar(T valor,
+        Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            (raiz, RaizRepositorio) =eliminarN(Global<T>.nodoArbol.raiz, Global<T>.nodoArbol.RaizRepositorio, valor, MenorQue, MayorQue);
+                                                                                                                                                                            
+        }
+
+
+        public (NodoArbol<T> arbolOriginal, NodoArbol<T> arbolSombra) eliminarN(NodoArbol<T> raizSub, NodoArbol<T> arbolsombra, T valor,
+             Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            if (raizSub == null)
+            {
+                return (null,null);
+            }
+
+            else if (MenorQue(valor, raizSub.data))
+            {
+                return (raizSub.izq,arbolsombra.izq) = eliminarN(raizSub.izq, arbolsombra.izq, valor, MenorQue, MayorQue);
+
+            }
+            else if (MayorQue(valor, raizSub.data))
+            {
+                return (raizSub.der,arbolsombra.der) = eliminarN(raizSub.der, arbolsombra.der, valor, MenorQue, MayorQue);
+            }
+            else
+            {//LA PRIMER EVALUACION EXAMINARA LOS NODOS HOJA
+                NodoArbol<T> p = raizSub;
+                NodoArbol<T> pSombra = arbolsombra;
+                if (p.der == null && p.izq == null)
+                {
+                    raizSub = null;
+                    arbolsombra = null;/*arbol sombra*/
+
+                }
+                else
+                {
+                    cambiar(p, pSombra);
+                }
+
+            }
+            return (raizSub,arbolsombra);
+        }
+
+        protected (NodoArbol<T> arboloriginal, NodoArbol<T> arbSombra) cambiar(NodoArbol<T> aux, NodoArbol<T> auxSombra)
+        {
+            /*Nodos Arbol original*/
+            NodoArbol<T> p = aux;
+            NodoArbol<T> a = aux.der;
+
+            /*Nodo Arbol sombra*/
+            NodoArbol<T> pSombra= auxSombra;
+            NodoArbol<T> aSombra = auxSombra.der;
+            while (a.der != null)
+            {
+                /*Arbol original*/
+                p = a;
+                a = a.der;
+
+                /*Arbol Sombra*/
+                pSombra = aSombra;
+                aSombra = aSombra.der;
+
+            }
+            aux.data = a.data;/*arbol original*/
+            auxSombra.data = aSombra.data;/*arbol sombra*/
+            if (p == aux)
+            {
+                p.izq = a.izq;
+
+                /*Arbol sombra*/
+                pSombra.izq = aSombra.izq;
+            }
+            else
+            {
+                p.der = a.izq;
+
+                /*Arbol Sombra*/
+                pSombra.der = aSombra.izq;
+            }
+            return (a,aSombra);
+        }
+
+
 
 
     }
