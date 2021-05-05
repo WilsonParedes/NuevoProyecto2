@@ -143,11 +143,15 @@ namespace NuevoProyecto2
                             }
                             catch
                             {
-
+                                Console.WriteLine("No existe la versión para visualizar el árbol");
                             }
                             
                             
                             
+                        }else if (op.Contains("delete rm "))
+                        {
+                            /*Global<object>.MT.VisualizacionArbolForm(Global<object>.manejoAr.DevueveCorrelativoVersion().ToString(), op);*/
+
                         }
                         else
                         {

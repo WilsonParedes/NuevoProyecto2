@@ -21,6 +21,7 @@ namespace NuevoProyecto2.DataSystem
             Console.WriteLine("create ver       <Nombre Versión>:    Crea un versión de la ruta de acceso");
             Console.WriteLine("binnacle:                             Bitacora de Registros del Repositorio");
             Console.WriteLine("delete           <Número Versión>:    Borra una versión del Repositorio");
+            Console.WriteLine("delete rm        <Nombre Archivo>     Borra el archivo especificado de la última versión");
             Console.WriteLine("read:                                 Lee la version actual");
             Console.WriteLine("show tree view   <Número Version>:    Muestra el árbol completo");
         }
@@ -491,6 +492,8 @@ namespace NuevoProyecto2.DataSystem
             }
             
         }
+
+
 
         private void EscribeContenidoEnLosTXT(string contendioArchivo)
         {
