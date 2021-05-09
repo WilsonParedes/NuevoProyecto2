@@ -217,7 +217,7 @@ namespace NuevoProyecto2.DataSystem
                 int cantidad = 0;
                 string VersConte = "";
                 (cantidad, VersConte, contenidoVersion) = DevuelveCantidadArchivosVersion(contenidoLista);
-                int coincidencias = ComparaCarpetaconContenidoVersion(contenidoLista, archivosCarpeta);
+                int coincidencias = ComparaCarpetaconContenidoVersion(contenidoLista, archivosCarpeta);/*compara la cantidad de archivos que coinciden*/
                 if (cantidad != archivosCarpeta.Length)
                 {
                     Global<object>.manejoAr.agregarVersion(new Repositorio(nombreVers.Substring(11), contenidoCadena), ArbolCompleto);
