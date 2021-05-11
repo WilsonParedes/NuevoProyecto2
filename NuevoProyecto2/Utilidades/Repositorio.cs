@@ -17,7 +17,7 @@ namespace NuevoProyecto2
 
         public string fecha;
         public string fechaapoyo { get; set; }
-        public string separador { get; set; }
+        public char separador { get; set; }
 
         public double posicion { get; set; }
 
@@ -35,7 +35,7 @@ namespace NuevoProyecto2
             this.comentario = comentario;
             this.contenido = contenido;
             fecha = DateTime.Now.ToString();
-            this.separador = "|";
+            this.separador = Global<char>.SeparadorRalla;
         }
 
         public Repositorio(string nombreArchivo, string contenido, string pesoArchivo, string valorHexa)
@@ -48,7 +48,7 @@ namespace NuevoProyecto2
         }
 
 
-        public Repositorio(string contadorauxiliar, string fechadeapoyo, string comentario, string contenido, string separador)
+        public Repositorio(string contadorauxiliar, string fechadeapoyo, string comentario, string contenido, char separador)
         {
             this.contadorauxiliar = contadorauxiliar;
             this.fechaapoyo = fechadeapoyo;
@@ -79,21 +79,21 @@ namespace NuevoProyecto2
             /*Datos Arbol*/
             if (contador <= 0)
             {
-            return $"(" +
-                       $"Nombre Archivo: {nombreArchivo}" + "%" +
-                       $"Peso Archivo: {pesoArchivo}"+ "%"  +
-                       $"Fecha: {fecha}" + "%" +
-                       $"Valor Hexa: {valorHexa}" + "%" +
+            return Global<char>.SeparadorElevacion +
+                       $"Nombre Archivo: {nombreArchivo}" + Global<char>.SeparadorPorcentaje +
+                       $"Peso Archivo: {pesoArchivo}"+ Global<char>.SeparadorPorcentaje +
+                       $"Fecha: {fecha}" + Global<char>.SeparadorPorcentaje +
+                       $"Valor Hexa: {valorHexa}" + Global<char>.SeparadorPorcentaje +
                        $"Contenido archivo: {contenido}"; 
             }
             if (validarNombrearhc>0)
             {
                 return $"{nombreArchivo}";
             }
-            return $"Versión No.:  {contador}" + "%" +
+            return $"Versión No.:  {contador}" + Global<char>.SeparadorPorcentaje +
                    $"Fecha: {fecha}" + "%" +
-                   $"Comentario: {comentario}" + "%" +
-                   $"Contenido: {contenido}" + "%" +
+                   $"Comentario: {comentario}" + Global<char>.SeparadorPorcentaje +
+                   $"Contenido: {contenido}" + Global<char>.SeparadorPorcentaje +
                    $"Separador: {separador}";
 
         }

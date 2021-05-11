@@ -93,11 +93,7 @@ namespace NuevoProyecto2.DataSystem
                     Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
                     StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
                     sw.Close();
-                    string[] nombreauxiliar = nombreArchivo.Split('.');
-                    if (nombreauxiliar[1].Equals("txt"))
-                    {
-                        EscribeContenidoEnLosTXT(contenidoArchivo);
-                    }
+                    EscribeContenidoEnLosTXT(contenidoArchivo);
                     
                 }
             }
@@ -134,15 +130,7 @@ namespace NuevoProyecto2.DataSystem
                         peso = pesoArchivo[i].Length.ToString();
                         cadena = ConvertirCadenaaHexa(nombreArchivo.ToString());
                         double num = Convert.ToDouble(cadena.ToString());
-                        
-                        if (!extensiónArchivo.Equals(".txt"))
-                        {
-                            contenidoArchivo = "El archivo no soporta contenido";
-                        }
-                        else
-                        {
-                            contenidoArchivo = Global<object>.manejoAr.LeerArchivo(nombreArchivo);
-                        }
+                        contenidoArchivo = Global<object>.manejoAr.LeerArchivo(nombreArchivo);
                         repositorio = new Repositorio(nombreArchivo, contenidoArchivo, peso, cadena);
                         _ = Global<Object>.nodoArbol.Insertar(new Repositorio(num), repositorio, MenorQueEntero, MayorQueEntero);
                         nuevaCadena = nuevaCadena + repositorio.ToString();
@@ -286,19 +274,11 @@ namespace NuevoProyecto2.DataSystem
                 nombreArchivoCarpeta = archivosCarpeta[i].Name.ToString();
                 pesoArchivoCarpeta = archivosCarpeta[i].Length;
                 extensiónArchivo = archivosCarpeta[i].Extension.ToString();
-                if (!extensiónArchivo.Equals(".txt"))
-                {
-                    contenidoActualdelArchivo = "El archivo no soporta contenido";
-                }
-                else
-                {
-                    contenidoActualdelArchivo = Global<object>.manejoAr.LeerArchivo(nombreArchivoCarpeta);
-                }
-                
-                ArrayContenido = contenidoLista.Split('|');
+                contenidoActualdelArchivo = Global<object>.manejoAr.LeerArchivo(nombreArchivoCarpeta);
+                ArrayContenido = contenidoLista.Split(Global<char>.SeparadorRalla);
                 for (j = 0; j < ArrayContenido.Length - 2; j++)
                 {
-                    AuxiliarArrayContenido = ArrayContenido[j].Split('%');
+                    AuxiliarArrayContenido = ArrayContenido[j].Split(Global<char>.SeparadorPorcentaje);
                     for (k = 0; k < 5; k++)
                     {
                         ContenidoNombreVersion = AuxiliarArrayContenido[0].Substring(16).ToString();
@@ -327,15 +307,15 @@ namespace NuevoProyecto2.DataSystem
             string[] ArrayContenido;
             string[] AuxiliarArrayContenido;
             string nombreVersion = "", contenidoVersion = ""; 
-            ArrayContenido = contenidoLista.Split('|');
+            ArrayContenido = contenidoLista.Split(Global<char>.SeparadorRalla);
             for (i = 0; i < ArrayContenido.Length - 2; i++)
             {
-                AuxiliarArrayContenido = ArrayContenido[i].Split('%');
+                AuxiliarArrayContenido = ArrayContenido[i].Split(Global<char>.SeparadorPorcentaje);
                 for (j = 0; j < 1; j++)
                 {
                     cantidad = cantidad +1;
-                    nombreVersion += AuxiliarArrayContenido[0].ToString()+"%";
-                    contenidoVersion += AuxiliarArrayContenido[4].Substring(19).ToString() + "%";
+                    nombreVersion += AuxiliarArrayContenido[0].ToString()+ Global<char>.SeparadorPorcentaje;
+                    contenidoVersion += AuxiliarArrayContenido[4].Substring(19).ToString() + Global<char>.SeparadorPorcentaje;
 
                 }
             }
@@ -378,7 +358,7 @@ namespace NuevoProyecto2.DataSystem
 
             if (contenidoLista != null)
             {
-                ArrayContenido = contenidoLista.Split('|');
+                ArrayContenido = contenidoLista.Split(Global<char>.SeparadorRalla);
             }
             else
             {
@@ -403,10 +383,10 @@ namespace NuevoProyecto2.DataSystem
             int i;
             if (nuevaLista != null)
             {
-                string[] nuevoArreglo = nuevaLista.Split('%');
+                string[] nuevoArreglo = nuevaLista.Split(Global<char>.SeparadorPorcentaje);
                 for (i = 0; i < 1; i++)
                 {
-                    Repositorio ultimaVersion = new Repositorio(nuevoArreglo[0], nuevoArreglo[1], nuevoArreglo[2], nuevoArreglo[3], "/");
+                    Repositorio ultimaVersion = new Repositorio(nuevoArreglo[0], nuevoArreglo[1], nuevoArreglo[2], nuevoArreglo[3], '/');
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine("\t\n            DATOS ALMACENADOS DE LA VERSIÓN");
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -441,7 +421,7 @@ namespace NuevoProyecto2.DataSystem
             for (i = 0; i < ArrayContenido.Length - 2; i++)
             {
 
-                AuxiliarArrayContenido = ArrayContenido[i].Split('%');
+                AuxiliarArrayContenido = ArrayContenido[i].Split(Global<char>.SeparadorPorcentaje);
                 for (j = 0; j < 5; j++)
                 {
                     nuevocontenidoLista = nuevocontenidoLista + AuxiliarArrayContenido[j] + "\n\t\t";
@@ -473,7 +453,7 @@ namespace NuevoProyecto2.DataSystem
             int i;
             if (op.Contains("show tree view "))
             {
-                AuxiliarArrayNombre = VersConte.Split('%');
+                AuxiliarArrayNombre = VersConte.Split(Global<char>.SeparadorPorcentaje);
                 for (i = 0; i < AuxiliarArrayNombre.Length - 1; i++)
                 {
 
@@ -482,8 +462,8 @@ namespace NuevoProyecto2.DataSystem
             }
             else
             {
-                AuxiliarArrayNombre = VersConte.Split('%');
-                AuxiliarArrayContenido = contenidoVersion.Split('%');
+                AuxiliarArrayNombre = VersConte.Split(Global<char>.SeparadorPorcentaje);
+                AuxiliarArrayContenido = contenidoVersion.Split(Global<char>.SeparadorPorcentaje);
                 for (i = 0; i < AuxiliarArrayNombre.Length - 1; i++)
                 {
 

@@ -130,8 +130,8 @@ namespace NuevoProyecto2
             while (actual != null)
             {
                 lista = actual.dato.ToString();
-                nuevoRepositorio = lista.Split('%');
-                ultimaVersion = new Repositorio(nuevoRepositorio[0], nuevoRepositorio[1], nuevoRepositorio[2], nuevoRepositorio[3], nuevoRepositorio[4]);
+                nuevoRepositorio = lista.Split(Global<char>.SeparadorPorcentaje);
+                ultimaVersion = new Repositorio(nuevoRepositorio[0], nuevoRepositorio[1], nuevoRepositorio[2], nuevoRepositorio[3], Global<char>.SeparadorRalla);
                 
                     Console.WriteLine("\t\t\t\t" + ultimaVersion.contadorauxiliar.ToString().Substring(14) + "\t" + ultimaVersion.fechaapoyo.ToString().Substring(7) +
                         "\t" + ultimaVersion.comentario.ToString().Substring(12) + "\n");
@@ -192,8 +192,8 @@ namespace NuevoProyecto2
                 for (i = 0; i < 1; i++)
                 {
                     lista = actual.dato.ToString();
-                    nuevoRepositorio = lista.Split('%');
-                    Repositorio busquedaVersion = new Repositorio(nuevoRepositorio[0], null, null, null, null);
+                    nuevoRepositorio = lista.Split(Global<char>.SeparadorPorcentaje);
+                    Repositorio busquedaVersion = new Repositorio(nuevoRepositorio[0], null, null, null, ' ');
                     contenerVersion = busquedaVersion.contadorauxiliar.Substring(14);
                     if (contenerVersion.Equals(""))
                     {
@@ -227,19 +227,19 @@ namespace NuevoProyecto2
                 for(i=0; i<1; i++)
                 {
                     ListRepositorioCompleto = actual.dato.ToString();
-                    repositorioCompleto = ListRepositorioCompleto.Split('(');
+                    repositorioCompleto = ListRepositorioCompleto.Split(Global<char>.SeparadorElevacion);
                     for (j = 0; j < 1; j++)
                     {
                         listNuevoRepositorio = repositorioCompleto[0].ToString();
-                        nuevoRepositorio = listNuevoRepositorio.Split('%');
-                        Repositorio busquedaVersion = new Repositorio(nuevoRepositorio[0], null, null, null, null);
+                        nuevoRepositorio = listNuevoRepositorio.Split(Global<char>.SeparadorPorcentaje);
+                        Repositorio busquedaVersion = new Repositorio(nuevoRepositorio[0], null, null, null, ' ');
                         contenerVersion = busquedaVersion.contadorauxiliar.Substring(14);
                         if (contenerVersion.Equals(version))
                         {
                             for(k=1;k< repositorioCompleto.Length; k++)
                             {
                                 
-                                contenido = contenido + repositorioCompleto[k]+"|";
+                                contenido = contenido + repositorioCompleto[k]+Global<char>.SeparadorRalla;
                             }
                             return (listNuevoRepositorio,contenido);
                             break;
@@ -270,8 +270,8 @@ namespace NuevoProyecto2
                 lista = actual.dato.ToString();
                 for (i = 0; i < 1; i++)
                 {
-                    nuevoRepositorio = lista.Split('%');
-                    Repositorio busquedaVersion = new Repositorio(nuevoRepositorio[0], nuevoRepositorio[1], nuevoRepositorio[2], nuevoRepositorio[3], nuevoRepositorio[4]);
+                    nuevoRepositorio = lista.Split(Global<char>.SeparadorPorcentaje);
+                    Repositorio busquedaVersion = new Repositorio(nuevoRepositorio[0], nuevoRepositorio[1], nuevoRepositorio[2], nuevoRepositorio[3], Global<char>.SeparadorRalla);
                     contenerVersion = busquedaVersion.contadorauxiliar.Substring(14);
                     if (contenerVersion.Equals(version))
                     {

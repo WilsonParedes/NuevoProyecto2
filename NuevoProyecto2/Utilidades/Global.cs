@@ -19,6 +19,9 @@ namespace NuevoProyecto2
         public static string NombreArch = "";
         public static string folderParh = "";//Directorio Ingresado por Usuario
         public static string _pathTexto = "";
+        public static char SeparadorRalla = '|';
+        public static char SeparadorPorcentaje = '%';
+        public static char SeparadorElevacion = '^';
 
     }
 }
