@@ -96,6 +96,17 @@ namespace NuevoProyecto2.DataSystem
                     EscribeContenidoEnLosTXT(contenidoArchivo);
                     
                 }
+                else if (op.Contains("remove rm "))
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Global<string>.NombreArch = nombreArchivo;
+                    Global<string>.nuevoPath = Global<string>._pathTexto + Global<string>.NombreArch;
+                    StreamWriter sw = new StreamWriter(Global<string>.nuevoPath, true);
+                    sw.Close();
+                    EscribeContenidoEnLosTXT(contenidoArchivo);
+
+                }
+
             }
             catch (FileNotFoundException)
             {
@@ -475,11 +486,33 @@ namespace NuevoProyecto2.DataSystem
 
 
 
+
         private void EscribeContenidoEnLosTXT(string contendioArchivo)
         {
             StreamWriter escribirTXT = new StreamWriter(Global<string>.nuevoPath);
             escribirTXT.Write(contendioArchivo);
             escribirTXT.Close();
         }
+
+
+        public void RemoverHojadelArbol(string numerobuscar, string op)
+        {
+            int cantidad, j;
+            string nombreArchivoContenidVersion, contenidoLista, VersConte, cadenaSinUsar, contenidoVersion;
+            (nombreArchivoContenidVersion, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(numerobuscar);
+            (cantidad, VersConte, contenidoVersion) = Global<object>.MT.DevuelveCantidadArchivosVersion(contenidoLista);
+            EliminarArchivosdelDirectorio();
+            Global<bool>.nodoArbol.EliminarElContenidoArbol();
+            CrearArchivosenDirectoriodeUnaVersion(VersConte, op, contenidoVersion);
+            Nodos<object> ArbolCompleto = new Nodos<object>();
+            (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVersionenArbol(op, "crear");
+            Func<Object, Object, bool> MenorQueEntero = (x, y) => Convert.ToDouble(x.ToString()) < Convert.ToDouble(y.ToString());
+            Func<Object, Object, bool> MayorQueEntero = (x, y) => Convert.ToDouble(x.ToString()) > Convert.ToDouble(y.ToString());
+            string cadena = ConvertirCadenaaHexa(op.Substring(12).ToString());
+            double num = Convert.ToDouble(cadena.ToString());
+            Global<object>.manejoAr.Eliminar(num, MenorQueEntero, MayorQueEntero);
+        }
+
+
     }
 }

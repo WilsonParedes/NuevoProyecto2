@@ -353,16 +353,16 @@ namespace NuevoProyecto2
 
 
         //METODO BORRAR NODO
-        internal void Eliminar(T valor, T repositorio,
+        internal void Eliminar(T valor,
         Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
         {
-            eliminarN(raiz, RaizRepositorio, valor, repositorio,  MenorQue, MayorQue);
+            eliminarN(Global<T>.nodoArbol.raiz, Global<T>.nodoArbol.RaizRepositorio, valor, MenorQue, MayorQue);
         }
 
-        public (NodoArbol<T> raizsub, NodoArbol<T> arbolsombra)eliminarN(NodoArbol<T> raizSub, NodoArbol<T> arbolsombra, T valor, T repositorio,
+        public (NodoArbol<T> raizsub, NodoArbol<T> arbolsombra)eliminarN(NodoArbol<T> raizSub, NodoArbol<T> arbolsombra, T valor,
              Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
         {
-            (NodoArbol<T> padre, NodoArbol<T> padresombra) = BuscarPadre(raizSub, arbolsombra, valor, repositorio, MenorQue, MayorQue);
+            (NodoArbol<T> padre, NodoArbol<T> padresombra) = BuscarPadre(raizSub, arbolsombra, valor, MenorQue, MayorQue);
             if (raizSub == null)
             {
                 return (null,null);
@@ -370,12 +370,12 @@ namespace NuevoProyecto2
 
             else if (MenorQue(valor, raizSub.data))
             {
-                (raizSub.izq, arbolsombra.izq) = eliminarN(raizSub.izq, arbolsombra.izq, valor, repositorio, MenorQue, MayorQue);
+                (raizSub.izq, arbolsombra.izq) = eliminarN(raizSub.izq, arbolsombra.izq, valor, MenorQue, MayorQue);
 
             }
             else if (MayorQue(valor, raizSub.data))
             {
-                (raizSub.der, arbolsombra.der) = eliminarN(raizSub.der, arbolsombra.der, valor, repositorio, MenorQue, MayorQue);
+                (raizSub.der, arbolsombra.der) = eliminarN(raizSub.der, arbolsombra.der, valor, MenorQue, MayorQue);
             }
             else
             {
@@ -409,7 +409,7 @@ namespace NuevoProyecto2
                     arbolsombra.data = minimosombra.data;
                     raizSub.izq = null;
                     arbolsombra.izq = null;
-                    (raizSub.der,arbolsombra.der) = eliminarN(raizSub.der, arbolsombra.der, minimo.data, minimosombra.data, MenorQue, MayorQue);
+                    (raizSub.der,arbolsombra.der) = eliminarN(raizSub.der, arbolsombra.der, minimo.data, MenorQue, MayorQue);
 
                 }
             }
@@ -417,7 +417,7 @@ namespace NuevoProyecto2
         }
 
         //METODO ENCONTRAR PADRE DEL NODO
-        public (NodoArbol<T> raizsub, NodoArbol<T> arbolsombra) BuscarPadre(NodoArbol<T> Subraiz, NodoArbol<T> arbolsombra, T valor, T repositorio,
+        public (NodoArbol<T> raizsub, NodoArbol<T> arbolsombra) BuscarPadre(NodoArbol<T> Subraiz, NodoArbol<T> arbolsombra, T valor,
             Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
         {
             NodoArbol<T> temp = null;
@@ -443,11 +443,11 @@ namespace NuevoProyecto2
             }
             if (Subraiz.izq != null && MenorQue(valor, Subraiz.data))
             {
-                (temp,tempsombra) = BuscarPadre(Subraiz.izq, arbolsombra.izq, valor, repositorio, MenorQue, MayorQue);
+                (temp,tempsombra) = BuscarPadre(Subraiz.izq, arbolsombra.izq, valor, MenorQue, MayorQue);
             }
             if (Subraiz.der != null && MayorQue(valor, Subraiz.data))
             {
-                (temp, tempsombra) = BuscarPadre(Subraiz.der, arbolsombra.der, valor, repositorio, MenorQue, MayorQue);
+                (temp, tempsombra) = BuscarPadre(Subraiz.der, arbolsombra.der, valor, MenorQue, MayorQue);
             }
             return (temp,tempsombra);
         }
