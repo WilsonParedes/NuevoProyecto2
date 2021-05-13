@@ -351,8 +351,182 @@ namespace NuevoProyecto2
              
         }
 
-        
-        
+
+        //METODO BORRAR NODO
+        internal void Eliminar(T valor, T repositorio,
+        Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            eliminarN(raiz, RaizRepositorio, valor, repositorio,  MenorQue, MayorQue);
+        }
+
+        public (NodoArbol<T> raizsub, NodoArbol<T> arbolsombra)eliminarN(NodoArbol<T> raizSub, NodoArbol<T> arbolsombra, T valor, T repositorio,
+             Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            (NodoArbol<T> padre, NodoArbol<T> padresombra) = BuscarPadre(raizSub, arbolsombra, valor, repositorio, MenorQue, MayorQue);
+            if (raizSub == null)
+            {
+                return (null,null);
+            }
+
+            else if (MenorQue(valor, raizSub.data))
+            {
+                (raizSub.izq, arbolsombra.izq) = eliminarN(raizSub.izq, arbolsombra.izq, valor, repositorio, MenorQue, MayorQue);
+
+            }
+            else if (MayorQue(valor, raizSub.data))
+            {
+                (raizSub.der, arbolsombra.der) = eliminarN(raizSub.der, arbolsombra.der, valor, repositorio, MenorQue, MayorQue);
+            }
+            else
+            {
+                //CASO SIN HIJOS
+                if (raizSub.izq == null && raizSub.der == null)
+                {
+                    raizSub = null;
+                    arbolsombra = null;
+                    return (raizSub,arbolsombra);
+                }
+                //CASO 1 HIJO DERECHO
+                else if (raizSub.izq == null)
+                {
+                    padre = raizSub.der;
+                    padresombra = arbolsombra.der;
+                    return (raizSub,arbolsombra);
+                }
+                //CASO 1 HIJO IZQUIERDO
+                else if (raizSub.der == null)
+                {
+                    padre.izq = raizSub.izq;
+                    padresombra.izq = arbolsombra.izq;
+                    return (raizSub,arbolsombra);
+                }
+                //CASO 2 HIJOS
+                else
+                {
+                    NodoArbol<T> minimo = raizSub.izq;
+                    NodoArbol<T> minimosombra = arbolsombra.izq;
+                    raizSub.data = minimo.data;
+                    arbolsombra.data = minimosombra.data;
+                    raizSub.izq = null;
+                    arbolsombra.izq = null;
+                    (raizSub.der,arbolsombra.der) = eliminarN(raizSub.der, arbolsombra.der, minimo.data, minimosombra.data, MenorQue, MayorQue);
+
+                }
+            }
+            return (raizSub,arbolsombra);
+        }
+
+        //METODO ENCONTRAR PADRE DEL NODO
+        public (NodoArbol<T> raizsub, NodoArbol<T> arbolsombra) BuscarPadre(NodoArbol<T> Subraiz, NodoArbol<T> arbolsombra, T valor, T repositorio,
+            Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
+        {
+            NodoArbol<T> temp = null;
+            NodoArbol<T> tempsombra = null;
+            if (Subraiz == null)
+            {
+                return (null,null);
+            }
+            //Verifico si soy el padre
+            if (Subraiz.izq != null)
+            {
+                if (ComparaNodo(Subraiz.izq.data, valor) == true)
+                {
+                    return (Subraiz,arbolsombra);
+                }
+            }
+            if (Subraiz.der != null)
+            {
+                if (ComparaNodo(Subraiz.der.data, valor) == true)
+                {
+                    return (Subraiz,arbolsombra);
+                }
+            }
+            if (Subraiz.izq != null && MenorQue(valor, Subraiz.data))
+            {
+                (temp,tempsombra) = BuscarPadre(Subraiz.izq, arbolsombra.izq, valor, repositorio, MenorQue, MayorQue);
+            }
+            if (Subraiz.der != null && MayorQue(valor, Subraiz.data))
+            {
+                (temp, tempsombra) = BuscarPadre(Subraiz.der, arbolsombra.der, valor, repositorio, MenorQue, MayorQue);
+            }
+            return (temp,tempsombra);
+        }
+
+        //METODO COMPARA SI LOS NODOS SON IGUALES
+        public bool ComparaNodo(T Subraiz, T valor)
+        {
+            string info = Convert.ToString(valor);
+            string info2 = Convert.ToString(Subraiz);
+            if (info == info2)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //OBTENER FACTOR DE EQULIBRIO
+        public (int raizsub, int arbolsombra) Actualizarfe(NodoArbol<T> raizSub, NodoArbol<T> arbolsombra)
+        {
+            int altura = 0;
+            int alturasombra = 0;
+            raizSub.fe = 0;
+            arbolsombra.fe = 0;
+            if (raizSub == null)
+            {
+                return (0,0);
+            }
+            else
+            {
+                if (raizSub.izq != null)
+                {
+                    (raizSub.fe,arbolsombra.fe) = Actualizarfe(raizSub.izq, arbolsombra.izq);
+                }
+                if (raizSub.der != null)
+                {
+                    (raizSub.fe, arbolsombra.fe) = Actualizarfe(raizSub.der, arbolsombra.der);
+                }
+                //EVALUACION SIN HIJOS
+                if (raizSub.izq == null && raizSub.der == null)
+                {
+                    raizSub.fe = 0;
+                    arbolsombra.fe = 0;
+                }
+                else
+                {//EVALUA HIJO IZQUIERDO
+                    if (raizSub.der == null)
+                    {
+                        altura = 0 - Altura(raizSub.izq);
+                        alturasombra = altura;
+                        raizSub.fe = altura;
+                        arbolsombra.fe = alturasombra;
+                    }
+                    else if (raizSub.izq == null)
+                    {
+                        altura = Altura(raizSub.der) - 0;
+                        alturasombra = altura;
+                        raizSub.fe = altura;
+                        arbolsombra.fe = alturasombra;
+                    }
+                    else
+                    {
+                        altura = Altura(raizSub.der) - Altura(raizSub.izq);
+                        alturasombra = altura;
+                        raizSub.fe = altura;
+                        arbolsombra.fe = alturasombra;
+                    }
+
+                }
+
+            }
+            return (raizSub.fe, arbolsombra.fe);
+        }
+        public int Altura(NodoArbol<T> raizSub)
+        {
+            if (raizSub == null)
+                return (0);
+            else
+                return 1 + Math.Max(Altura(raizSub.izq), Altura(raizSub.der)); 
+        }
 
 
     }
