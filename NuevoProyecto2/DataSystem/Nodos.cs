@@ -88,8 +88,23 @@ namespace NuevoProyecto2
             }
             else throw new Exception("Nodo duplicado");
 
-
-
+            /*Actualizarfe(raizSub,reposi);
+            if (Actualizarfe(raizSub,reposi) == (2,2))
+            {
+                if (MenorQue(valor, raizSub.der.data))
+                    (raizSub,reposi) = RotacionDobleDer(raizSub,reposi);
+                else
+                    (raizSub,reposi) = RotacionSimpleDer(raizSub,reposi);
+            }
+            if (Actualizarfe(raizSub,reposi) == (-2,-2))
+            {
+                if (MayorQue(valor, raizSub.izq.data))
+                    (raizSub,reposi) = RotacionDobleIzq(raizSub,reposi);
+                else
+                    (raizSub,reposi) = RotacionSimpleIzq(raizSub,reposi);
+            }
+            return (raizSub,reposi);*/
+            (raizSub,reposi) = Balancear(raizSub,reposi);
             return (raizSub, reposi);
         }
 
