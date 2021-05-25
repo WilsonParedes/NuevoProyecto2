@@ -116,7 +116,7 @@ namespace NuevoProyecto2.DataSystem
 
         /*Método encargado de crear un árbol y posteriormente crear nodos dentro de ese arbol binario de busqueda*/
         /*Es invocado por 2 métodos VisualizacionArbolForm y la opción de "crear ver" en Program*/
-        public (string cadena, Nodos<Object> ArbolCompleto) CrearVersionenArbol(string nombreVresion, string identificador) 
+        public NodoArbol<object> CrearVersionenArbol(string nombreVresion, string identificador) 
         {
             string[] lista = null;
             int tamañoDirec=0, i= 0;
@@ -151,7 +151,7 @@ namespace NuevoProyecto2.DataSystem
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(Global<string>._pathTexto + "\\" + "No se pudo guardar la versión, el siguiente archivo tiene conflicto " + nombreArchivo + " Intente renombrarlo y vuelva a crear la versión");
                         Console.ForegroundColor = ConsoleColor.White;
-                        return (null, null);
+                        return (null);
                     }
                 }
 
@@ -175,13 +175,13 @@ namespace NuevoProyecto2.DataSystem
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine(Global<string>._pathTexto + "\\" + "No se pudo guardar la versión, el siguiente archivo tiene conflicto " + nombreArchivo + " Intente renombrarlo y vuelva a crear la versión");
                         Console.ForegroundColor = ConsoleColor.White;
-                        return (null, null);
+                        return (null);
 
                     }
                 }
 
             }
-            return (nuevaCadena, Global<Object>.nodoArbol.RaizRepositorio);
+            return Global<object>.nodoArbol.RaizRepositorio;
         }
 
         /*Método encarado de convertir el nombre del archivo en formato Hexadecimal*/
@@ -356,7 +356,7 @@ namespace NuevoProyecto2.DataSystem
             Global<bool>.nodoArbol.EliminarElContenidoArbol();
             CrearArchivosenDirectoriodeUnaVersion(VersConte, op,"");
             Nodos<object> ArbolCompleto = new Nodos<object>();
-            (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVersionenArbol(op, "");
+            Global<object>.MT.CrearVersionenArbol(op, "");
         }
 
         public void OpcionBusqueda(string op)
@@ -505,12 +505,32 @@ namespace NuevoProyecto2.DataSystem
             Global<bool>.nodoArbol.EliminarElContenidoArbol();
             CrearArchivosenDirectoriodeUnaVersion(VersConte, op, contenidoVersion);
             Nodos<object> ArbolCompleto = new Nodos<object>();
-            (cadenaSinUsar, ArbolCompleto) = Global<object>.MT.CrearVersionenArbol(op, "crear");
+            Global<object>.MT.CrearVersionenArbol(op, "crear");
             Func<Object, Object, bool> MenorQueEntero = (x, y) => Convert.ToDouble(x.ToString()) < Convert.ToDouble(y.ToString());
             Func<Object, Object, bool> MayorQueEntero = (x, y) => Convert.ToDouble(x.ToString()) > Convert.ToDouble(y.ToString());
             string cadena = ConvertirCadenaaHexa(op.Substring(12).ToString());
             double num = Convert.ToDouble(cadena.ToString());
             Global<object>.manejoAr.Eliminar(num, MenorQueEntero, MayorQueEntero);
+
+        }
+
+
+        
+        public string  DevuelveCadenadelArbolInOrden(NodoArbol<object> raiz)
+        {
+            
+            if (raiz == null)
+            {
+                /*Console.Write(" ");*/
+            }
+            else
+            {
+                Global<string>.cadenadevuelvearbol += raiz.data;
+                DevuelveCadenadelArbolInOrden(raiz.izq);
+                DevuelveCadenadelArbolInOrden(raiz.der);
+
+            }
+            return Global<string>.cadenadevuelvearbol;
         }
 
 

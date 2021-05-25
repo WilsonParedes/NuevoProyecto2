@@ -73,11 +73,13 @@ namespace NuevoProyecto2
                         } else if (op.Contains("create ver "))
                         {
 
-                            string cadena = "";
+                            string cadenaquitar = "";
                             Global<bool>.nodoArbol.EliminarElContenidoArbol();
-                            Nodos<Object> ArbolCompleto = new Nodos<Object>();
-                            (cadena, ArbolCompleto) = Global<object>.MT.CrearVersionenArbol(op,"crear");
-                            Global<object>.MT.CrearVersionEnListaEnlazada(cadena, op, ArbolCompleto);
+                            NodoArbol<object> ArbolCompleto = new NodoArbol<object>();
+                            ArbolCompleto = Global<object>.MT.CrearVersionenArbol(op,"crear");
+                            Global<string>.cadenadevuelvearbol = "";
+                            Global<string>.cadenadevuelvearbol = Global<object>.MT.DevuelveCadenadelArbolInOrden(ArbolCompleto);
+                            Global<object>.MT.CrearVersionEnListaEnlazada(Global<string>.cadenadevuelvearbol, op, ArbolCompleto);
 
                         }
                         else if (op.Equals("read"))

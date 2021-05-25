@@ -89,6 +89,7 @@ namespace NuevoProyecto2
             else throw new Exception("Nodo duplicado");
 
 
+
             return (raizSub, reposi);
         }
 
@@ -356,10 +357,11 @@ namespace NuevoProyecto2
         internal void Eliminar(T valor,
         Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
         {
-            eliminarN(Global<T>.nodoArbol.raiz, Global<T>.nodoArbol.RaizRepositorio, valor, MenorQue, MayorQue);
+            (Global<T>.nodoArbol.raiz, Global<T>.nodoArbol.RaizRepositorio) = eliminarN(Global<T>.nodoArbol.raiz, Global<T>.nodoArbol.RaizRepositorio, valor, MenorQue, MayorQue);
+            
         }
 
-        public (NodoArbol<T> raizsub, NodoArbol<T> arbolsombra)eliminarN(NodoArbol<T> raizSub, NodoArbol<T> arbolsombra, T valor,
+        public (NodoArbol<T> raizsub, NodoArbol<T> arbolsombra) eliminarN(NodoArbol<T> raizSub, NodoArbol<T> arbolsombra, T valor,
              Func<T, T, bool> MenorQue, Func<T, T, bool> MayorQue)
         {
             (NodoArbol<T> padre, NodoArbol<T> padresombra) = BuscarPadre(raizSub, arbolsombra, valor, MenorQue, MayorQue);
@@ -528,6 +530,72 @@ namespace NuevoProyecto2
                 return 1 + Math.Max(Altura(raizSub.izq), Altura(raizSub.der)); 
         }
 
+
+        public (NodoArbol<T> raizSub, NodoArbol<T> arbolSombra) Balancear(NodoArbol<T> raizSub, NodoArbol<T> arbolSombra)
+        {
+            int validarraizsub, validararbolsombra = 0;
+            if (Actualizarfe(raizSub,arbolSombra) == (2,2) )
+            {
+                (validarraizsub, validararbolsombra)= Actualizarfe(raizSub.der, arbolSombra.der);
+                if (validarraizsub>0)
+                    (raizSub,arbolSombra) = RotacionSimpleDer(raizSub,arbolSombra);
+                else
+                    (raizSub, arbolSombra) = RotacionDobleDer(raizSub,arbolSombra);
+                return (raizSub,arbolSombra);
+            }
+            if (Actualizarfe(raizSub, arbolSombra) == (-2,-2))
+            {
+                (validarraizsub, validararbolsombra) = Actualizarfe(raizSub.izq, arbolSombra.izq);
+                if (validarraizsub < 0)
+                    (raizSub, arbolSombra) = RotacionSimpleIzq(raizSub,arbolSombra);
+                else
+                    (raizSub, arbolSombra) = RotacionDobleIzq(raizSub,arbolSombra);
+                return (raizSub,arbolSombra);
+            }
+            return (raizSub,arbolSombra);
+        }
+
+        public (NodoArbol<T> raizSub, NodoArbol<T> arbolSombra) RotacionSimpleIzq(NodoArbol<T> raizSub, NodoArbol<T> arbolSombra)
+        {
+            NodoArbol<T> aux = raizSub;
+            NodoArbol<T> auxSombra = arbolSombra;
+            aux = raizSub.izq;
+            auxSombra = arbolSombra.izq;
+            raizSub.izq = aux.der;
+            arbolSombra.izq = auxSombra.der;
+            aux.der = raizSub;
+            auxSombra.der = arbolSombra;
+            raizSub.fe = Math.Max(Altura(raizSub.izq), Altura(raizSub.der));/**/
+            (aux.fe,auxSombra.fe) = Actualizarfe(aux,auxSombra);
+            return (aux,auxSombra);
+        }
+        
+        public (NodoArbol<T> raizSub, NodoArbol<T> arbolSombra) RotacionSimpleDer(NodoArbol<T> raizSub, NodoArbol<T> arbolSombra)
+        {
+            NodoArbol<T> aux = raizSub;
+            NodoArbol<T> auxSombra = arbolSombra;
+            aux = raizSub.der;
+            auxSombra = arbolSombra.der;
+            raizSub.der = aux.izq;
+            arbolSombra.der = auxSombra.izq;
+            aux.izq = raizSub;
+            auxSombra.izq = arbolSombra;
+            raizSub.fe = Math.Max(Altura(raizSub.izq), Altura(raizSub.der));
+            (aux.fe,auxSombra.fe) = Actualizarfe(aux,auxSombra);
+            return (aux,auxSombra);
+        }
+        
+        public (NodoArbol<T>raizSub, NodoArbol<T> arbolSombra) RotacionDobleIzq(NodoArbol<T> raizSub, NodoArbol<T> arbolSombra)
+        {
+            (raizSub.izq,arbolSombra.izq) = RotacionSimpleDer(raizSub.izq,arbolSombra.izq);
+            return RotacionSimpleIzq(raizSub,arbolSombra);
+        }
+        
+        public (NodoArbol<T> raizSub, NodoArbol<T> arbolSombra) RotacionDobleDer(NodoArbol<T> raizSub, NodoArbol<T> arbolSombra)
+        {
+            (raizSub.der,arbolSombra.der) = RotacionSimpleIzq(raizSub.der,arbolSombra.der);
+            return RotacionSimpleDer(raizSub,arbolSombra);
+        }
 
     }
 }

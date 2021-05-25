@@ -22,6 +22,7 @@ namespace NuevoProyecto2
         public static char SeparadorRalla = '|';
         public static char SeparadorPorcentaje = '%';
         public static char SeparadorElevacion = '^';
+        public static string cadenadevuelvearbol = "";
 
     }
 }
