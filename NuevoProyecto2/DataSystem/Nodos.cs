@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using NuevoProyecto2.Utilidades;
 
 namespace NuevoProyecto2
 {
@@ -87,23 +88,6 @@ namespace NuevoProyecto2
                 (raizSub.der, reposi.der) = Insertar(raizSub.der, reposi.der, valor, repositorio, MenorQue, MayorQue);
             }
             else throw new Exception("Nodo duplicado");
-
-            /*Actualizarfe(raizSub,reposi);
-            if (Actualizarfe(raizSub,reposi) == (2,2))
-            {
-                if (MenorQue(valor, raizSub.der.data))
-                    (raizSub,reposi) = RotacionDobleDer(raizSub,reposi);
-                else
-                    (raizSub,reposi) = RotacionSimpleDer(raizSub,reposi);
-            }
-            if (Actualizarfe(raizSub,reposi) == (-2,-2))
-            {
-                if (MayorQue(valor, raizSub.izq.data))
-                    (raizSub,reposi) = RotacionDobleIzq(raizSub,reposi);
-                else
-                    (raizSub,reposi) = RotacionSimpleIzq(raizSub,reposi);
-            }
-            return (raizSub,reposi);*/
             (raizSub,reposi) = Balancear(raizSub,reposi);
             return (raizSub, reposi);
         }
@@ -587,8 +571,12 @@ namespace NuevoProyecto2
         
         public (NodoArbol<T> raizSub, NodoArbol<T> arbolSombra) RotacionSimpleDer(NodoArbol<T> raizSub, NodoArbol<T> arbolSombra)
         {
+
+            
+
             NodoArbol<T> aux = raizSub;
             NodoArbol<T> auxSombra = arbolSombra;
+
             aux = raizSub.der;
             auxSombra = arbolSombra.der;
             raizSub.der = aux.izq;
@@ -596,18 +584,37 @@ namespace NuevoProyecto2
             aux.izq = raizSub;
             auxSombra.izq = arbolSombra;
             raizSub.fe = Math.Max(Altura(raizSub.izq), Altura(raizSub.der));
-            (aux.fe,auxSombra.fe) = Actualizarfe(aux,auxSombra);
+
+
+
+            /*Escribir contenido en el archivo*/
+            BitacoraRotacion br = new BitacoraRotacion(raizSub.fe, "D");
+            Global<object>.MT.EscribeContenidoEnLosTXT(br.ToString());
+
+            (aux.fe, auxSombra.fe) = Actualizarfe(aux, auxSombra);
             return (aux,auxSombra);
         }
         
         public (NodoArbol<T>raizSub, NodoArbol<T> arbolSombra) RotacionDobleIzq(NodoArbol<T> raizSub, NodoArbol<T> arbolSombra)
         {
+
+
+            /*Escribir contenido en el archivo*/
+            BitacoraRotacion br = new BitacoraRotacion(raizSub.fe, "II");
+            Global<object>.MT.EscribeContenidoEnLosTXT(br.ToString());
+            
+
             (raizSub.izq,arbolSombra.izq) = RotacionSimpleDer(raizSub.izq,arbolSombra.izq);
             return RotacionSimpleIzq(raizSub,arbolSombra);
         }
         
         public (NodoArbol<T> raizSub, NodoArbol<T> arbolSombra) RotacionDobleDer(NodoArbol<T> raizSub, NodoArbol<T> arbolSombra)
         {
+
+            /*Escribir contenido en el archivo*/
+            BitacoraRotacion br = new BitacoraRotacion(raizSub.fe, "DD");
+            Global<object>.MT.EscribeContenidoEnLosTXT(br.ToString());
+
             (raizSub.der,arbolSombra.der) = RotacionSimpleIzq(raizSub.der,arbolSombra.der);
             return RotacionSimpleDer(raizSub,arbolSombra);
         }

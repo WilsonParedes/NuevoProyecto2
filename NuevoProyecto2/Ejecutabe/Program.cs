@@ -50,6 +50,8 @@ namespace NuevoProyecto2
                     try
                     {
                         repetir = Global<bool>.MT.CrearDirectorio(inicializar.Substring(5), nombreCarpeta, Global<string>.codSys);
+                        Global<object>.MT.CrearArchivosEnDirectorio("create file bitacora.dat", Global<string>.codSys, "", "");
+                        Global<object>.conectar();
                     }
                     catch (ArgumentOutOfRangeException t)
                     {
@@ -123,6 +125,7 @@ namespace NuevoProyecto2
                             Console.ForegroundColor = ConsoleColor.DarkGreen;
                             Global<object>.manejoAr.RecorreListaVersiones(); //Llamada al método Recorrer, este recorre la lista enlazada
                             Console.ForegroundColor = ConsoleColor.White;
+                            Global<object>.GB.ExtraerTabla();
                         }
                         else if (op.Contains("delete "))
                         {

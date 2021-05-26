@@ -205,13 +205,14 @@ namespace NuevoProyecto2.DataSystem
         /*Es invocado por la opción "crear ver " en Program*/
         public void CrearVersionEnListaEnlazada(string contenidoCadena, string nombreVers, Nodos<object> ArbolCompleto)
         {
-
+            Repositorio repositorio;
             /*Se agregó este nuevo bloque de if para validar si se almacenará o no un nodo*/
-            if (!Global<object>.manejoAr.validarNodosVersiones()&& contenidoCadena!=null)
+            if (!Global<object>.manejoAr.validarNodosVersiones() && contenidoCadena != null)
             {
                 FileInfo[] archivosCarpeta = ArchivosDirectorio();
                 int ultimaVersion = Global<object>.manejoAr.DevueveCorrelativoVersion();
                 string nombreArchivoContenidVersion, contenidoLista, contenidoVersion;
+                
                 (nombreArchivoContenidVersion, contenidoLista) = Global<object>.manejoAr.BusquedaVersion(ultimaVersion.ToString());
                 int cantidad = 0;
                 string VersConte = "";
@@ -219,7 +220,9 @@ namespace NuevoProyecto2.DataSystem
                 int coincidencias = ComparaCarpetaconContenidoVersion(contenidoLista, archivosCarpeta);/*compara la cantidad de archivos que coinciden*/
                 if (cantidad != archivosCarpeta.Length)
                 {
-                    Global<object>.manejoAr.agregarVersion(new Repositorio(nombreVers.Substring(11), contenidoCadena), ArbolCompleto);
+                    repositorio = new Repositorio(nombreVers.Substring(11), contenidoCadena);
+                    Global<object>.manejoAr.agregarVersion(repositorio, ArbolCompleto);
+                    Global<object>.GB.GuardarBDD(repositorio);
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine(Global<string>._pathTexto + "\\" + "Se almacenó el nodo exitosamente");
                     Console.ForegroundColor = ConsoleColor.White;
@@ -235,7 +238,9 @@ namespace NuevoProyecto2.DataSystem
                     }
                     else
                     {
-                        Global<object>.manejoAr.agregarVersion(new Repositorio(nombreVers.Substring(11), contenidoCadena), ArbolCompleto);
+                        repositorio = new Repositorio(nombreVers.Substring(11), contenidoCadena);
+                        Global<object>.manejoAr.agregarVersion(repositorio, ArbolCompleto);
+                        Global<object>.GB.GuardarBDD(repositorio);
                         Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine(Global<string>._pathTexto + "\\" + "Se almacenó el nodo exitosamente");
                         Console.ForegroundColor = ConsoleColor.White;
@@ -248,7 +253,9 @@ namespace NuevoProyecto2.DataSystem
                 if (contenidoCadena!="")
                 {
                     //Si la Lista enlazada se encuentra vacía, se procede a crear un Nodo Cabeza
-                    Global<object>.manejoAr.agregarVersion(new Repositorio(nombreVers.Substring(11), contenidoCadena), ArbolCompleto);
+                    repositorio = new Repositorio(nombreVers.Substring(11), contenidoCadena);
+                    Global<object>.manejoAr.agregarVersion(repositorio, ArbolCompleto);
+                    Global<object>.GB.GuardarBDD(repositorio);
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine(Global<string>._pathTexto + "\\" + "Se almacenó el nodo exitosamente");
                     Console.ForegroundColor = ConsoleColor.White;
@@ -485,9 +492,9 @@ namespace NuevoProyecto2.DataSystem
         }
 
 
+        
 
-
-        private void EscribeContenidoEnLosTXT(string contendioArchivo)
+        public void EscribeContenidoEnLosTXT(string contendioArchivo)
         {
             StreamWriter escribirTXT = new StreamWriter(Global<string>.nuevoPath);
             escribirTXT.Write(contendioArchivo);
@@ -532,6 +539,36 @@ namespace NuevoProyecto2.DataSystem
             }
             return Global<string>.cadenadevuelvearbol;
         }
+
+
+
+
+
+
+
+
+
+
+
+        public void CrearVersionEnListaEnlazadaDeLaBDD(Repositorio repositorio)
+        {
+            /*Se agregó este nuevo bloque de if para validar si se almacenará o no un nodo*/
+            if (!Global<object>.manejoAr.validarNodosVersiones())
+            {
+                Global<object>.manejoAr.agregarVersion(repositorio, null);
+            }
+            else
+            {
+                //Si la Lista enlazada se encuentra vacía, se procede a crear un Nodo Cabeza
+                Global<object>.manejoAr.agregarVersion(repositorio, null);
+
+
+            }
+
+        }
+
+
+
 
 
     }

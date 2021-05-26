@@ -25,6 +25,8 @@ namespace NuevoProyecto2
         public string pesoArchivo { get; set; }
         public string valorHexa { get; set; }
 
+        public int distintivoBDD { get; set; } /*este me va a sevir para distinguir de la BDD*/
+
         public int validarNombrearhc = 0;
 
 
@@ -38,6 +40,23 @@ namespace NuevoProyecto2
             this.separador = Global<char>.SeparadorRalla;
         }
 
+        public int getContador()
+        {
+            return contador;
+        }
+        public string getComentario()
+        {
+            return comentario;
+        }
+        public string getContenido()
+        {
+            return contenido;
+        }
+        public string getFecha()
+        {
+            fechaapoyo = fecha;
+            return fechaapoyo;
+        }
         public Repositorio(string nombreArchivo, string contenido, string pesoArchivo, string valorHexa)
         {
             this.nombreArchivo = nombreArchivo;
@@ -45,6 +64,16 @@ namespace NuevoProyecto2
             this.fecha = DateTime.Now.ToString();
             this.contenido = contenido;
             this.valorHexa = valorHexa;
+        }
+
+
+        public Repositorio(string contadorauxiliar, string nombrearchivo, string contenido, string fecha, int distintivo)
+        {
+            this.contadorauxiliar = contadorauxiliar;
+            this.comentario = nombrearchivo;
+            this.contenido = contenido;
+            this.fechaapoyo = fecha;
+            this.distintivoBDD = distintivo;
         }
 
 
@@ -77,7 +106,7 @@ namespace NuevoProyecto2
                 return posicion.ToString();
             }
             /*Datos Arbol*/
-            if (contador <= 0)
+            if (contador <= 0 && distintivoBDD<=0)
             {
             return Global<char>.SeparadorElevacion +
                        $"Nombre Archivo: {nombreArchivo}" + Global<char>.SeparadorPorcentaje +
@@ -89,6 +118,14 @@ namespace NuevoProyecto2
             if (validarNombrearhc>0)
             {
                 return $"{nombreArchivo}";
+            }
+            if (distintivoBDD>0)
+            {
+                return $"Versión No.:  {contadorauxiliar}" + Global<char>.SeparadorPorcentaje +
+                   $"Fecha: {fechaapoyo}" + "%" +
+                   $"Comentario: {comentario}" + Global<char>.SeparadorPorcentaje +
+                   $"Contenido: {contenido}" + Global<char>.SeparadorPorcentaje +
+                   $"Separador: "+ Global<char>.SeparadorRalla;
             }
             return $"Versión No.:  {contador}" + Global<char>.SeparadorPorcentaje +
                    $"Fecha: {fecha}" + "%" +
