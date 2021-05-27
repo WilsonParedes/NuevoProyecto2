@@ -15,7 +15,6 @@ namespace NuevoProyecto2
         public static NodoArbol<T> Arbol = new NodoArbol<T>();
         public static DataSystem.Herramientas MT = new DataSystem.Herramientas();
         public static DataSystem.GestorBDD GB = new DataSystem.GestorBDD();
-
         public static string codSys = @"C:\";
         public static string _path = @"C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\Proyecto 1\Proyecto1\temp\";
         public static string nuevoPath = "";

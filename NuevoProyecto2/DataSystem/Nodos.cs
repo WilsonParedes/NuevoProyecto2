@@ -309,7 +309,7 @@ namespace NuevoProyecto2
                 if (index == 0)
                 {
                     primero = primero.siguiente;
-                    Console.WriteLine(Global<string>._pathTexto + "\\"+"Registro eliminado con éxito");
+                    Console.WriteLine(Global<string>._pathTexto + "\\"+"Registro eliminado con éxito de la lista");
                 }
                 else
                 {
@@ -325,7 +325,7 @@ namespace NuevoProyecto2
                     //luego de asignar a temporal el nodo anterior al index recibido, se realiza el enlace
                     //al nodo siguiente del siguiente, ingnorando de esta forma el nodo que esta en la posición del index recibido
                     temporal.siguiente = temporal.siguiente.siguiente;
-                    Console.WriteLine(Global<string>._pathTexto + "\\"+"Registro eliminado con éxito");
+                    Console.WriteLine(Global<string>._pathTexto + "\\"+"Registro eliminado con éxito de la lista");
 
                 }
             }

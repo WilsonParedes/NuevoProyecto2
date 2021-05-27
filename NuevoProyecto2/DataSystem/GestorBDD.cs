@@ -19,7 +19,7 @@ namespace NuevoProyecto2.DataSystem
 				Console.WriteLine("dml = " + dml);
 				NpgsqlCommand ejecutor = new NpgsqlCommand(dml, Global<object>.ConectaBDD);
 				ejecutor.ExecuteNonQuery();
-				Console.WriteLine("Se grabo correctamente");
+				Console.WriteLine(Global<string>._pathTexto + "\\" + "Registro grabado exitosamente en la BDD");
 			}
 			catch (Exception throwables)
 			{
@@ -31,8 +31,8 @@ namespace NuevoProyecto2.DataSystem
         {
 			string dml = "SELECT * FROM \"Bitacora\"";
 			Console.WriteLine("dml = " + dml);
-			NpgsqlCommand ejecutor = new NpgsqlCommand(dml, Global<object>.ConectaBDD);
-			NpgsqlDataReader reader = ejecutor.ExecuteReader();
+			NpgsqlCommand serial = new NpgsqlCommand(dml, Global<object>.ConectaBDD);
+			NpgsqlDataReader reader = serial.ExecuteReader();
 			int NoVersion;
 			string NombreVersion, Contenido, Fecha;
 			Repositorio repositorio;
@@ -45,9 +45,23 @@ namespace NuevoProyecto2.DataSystem
 				repositorio = new Repositorio(NoVersion.ToString(), NombreVersion, Contenido, Fecha, 1);
 				Global<object>.MT.CrearVersionEnListaEnlazadaDeLaBDD(repositorio);
 			}
+			reader.Close();
+		}
 
-			Global<object>.manejoAr.RecorreListaVersiones();
-
+		public void EliminarRegistroBDD(int version)
+		{
+			try
+			{
+				string dml = "DELETE FROM \"Bitacora\" WHERE \"No. Version\" = "+ version + " ";
+				Console.WriteLine("dml = " + dml);
+				NpgsqlCommand delete = new NpgsqlCommand(dml, Global<object>.ConectaBDD);
+				delete.ExecuteNonQuery();
+				Console.WriteLine(Global<string>._pathTexto + "\\" + "Registro eliminado con éxito de la BDD");
+			}
+			catch (Exception throwables)
+			{
+				Console.WriteLine("No se puede crear");
+			}
 		}
 
 	}

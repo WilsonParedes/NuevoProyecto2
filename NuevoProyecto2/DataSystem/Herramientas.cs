@@ -542,14 +542,6 @@ namespace NuevoProyecto2.DataSystem
 
 
 
-
-
-
-
-
-
-
-
         public void CrearVersionEnListaEnlazadaDeLaBDD(Repositorio repositorio)
         {
             /*Se agregó este nuevo bloque de if para validar si se almacenará o no un nodo*/

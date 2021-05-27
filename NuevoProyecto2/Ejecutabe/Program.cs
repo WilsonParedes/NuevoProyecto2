@@ -52,6 +52,8 @@ namespace NuevoProyecto2
                         repetir = Global<bool>.MT.CrearDirectorio(inicializar.Substring(5), nombreCarpeta, Global<string>.codSys);
                         Global<object>.MT.CrearArchivosEnDirectorio("create file bitacora.dat", Global<string>.codSys, "", "");
                         Global<object>.conectar();
+
+                        Global<object>.GB.ExtraerTabla();
                     }
                     catch (ArgumentOutOfRangeException t)
                     {
@@ -125,7 +127,6 @@ namespace NuevoProyecto2
                             Console.ForegroundColor = ConsoleColor.DarkGreen;
                             Global<object>.manejoAr.RecorreListaVersiones(); //Llamada al método Recorrer, este recorre la lista enlazada
                             Console.ForegroundColor = ConsoleColor.White;
-                            Global<object>.GB.ExtraerTabla();
                         }
                         else if (op.Contains("delete "))
                         {
@@ -133,7 +134,7 @@ namespace NuevoProyecto2
                             string eliminar;
                             Console.ForegroundColor = ConsoleColor.White;
                             Global<object>.manejoAr.EliminaNodoVersiones(Global<object>.manejoAr.ObtenerIndiceVersiones(op.Substring(7)) - 1);//Llamada al método ElminarNodo
-
+                            Global<object>.GB.EliminarRegistroBDD(Convert.ToInt32(op.Substring(7)));
                         }
                         else if (op.Contains("show tree view "))
                         {
