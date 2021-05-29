@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NuevoProyecto2.DataSystem
+
 {
     class Herramientas
     {
@@ -222,7 +223,7 @@ namespace NuevoProyecto2.DataSystem
                 {
                     repositorio = new Repositorio(nombreVers.Substring(11), contenidoCadena);
                     Global<object>.manejoAr.agregarVersion(repositorio, ArbolCompleto);
-                    Global<object>.GB.GuardarBDD(repositorio);
+                    Global<string>.CadenaListaEnlazada = Global<string>.CadenaListaEnlazada + repositorio.ToString();
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine(Global<string>._pathTexto + "\\" + "Se almacenó el nodo exitosamente");
                     Console.ForegroundColor = ConsoleColor.White;
@@ -240,7 +241,7 @@ namespace NuevoProyecto2.DataSystem
                     {
                         repositorio = new Repositorio(nombreVers.Substring(11), contenidoCadena);
                         Global<object>.manejoAr.agregarVersion(repositorio, ArbolCompleto);
-                        Global<object>.GB.GuardarBDD(repositorio);
+                        Global<string>.CadenaListaEnlazada = Global<string>.CadenaListaEnlazada + repositorio.ToString();
                         Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine(Global<string>._pathTexto + "\\" + "Se almacenó el nodo exitosamente");
                         Console.ForegroundColor = ConsoleColor.White;
@@ -255,7 +256,7 @@ namespace NuevoProyecto2.DataSystem
                     //Si la Lista enlazada se encuentra vacía, se procede a crear un Nodo Cabeza
                     repositorio = new Repositorio(nombreVers.Substring(11), contenidoCadena);
                     Global<object>.manejoAr.agregarVersion(repositorio, ArbolCompleto);
-                    Global<object>.GB.GuardarBDD(repositorio);
+                    Global<string>.CadenaListaEnlazada = Global<string>.CadenaListaEnlazada + repositorio.ToString();
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine(Global<string>._pathTexto + "\\" + "Se almacenó el nodo exitosamente");
                     Console.ForegroundColor = ConsoleColor.White;
@@ -548,16 +549,23 @@ namespace NuevoProyecto2.DataSystem
             if (!Global<object>.manejoAr.validarNodosVersiones())
             {
                 Global<object>.manejoAr.agregarVersion(repositorio, null);
+                Global<string>.CadenaListaEnlazada = Global<string>.CadenaListaEnlazada + repositorio.ToString();
             }
             else
             {
                 //Si la Lista enlazada se encuentra vacía, se procede a crear un Nodo Cabeza
+                //Si la Lista enlazada se encuentra vacía, se procede a crear un Nodo Cabeza
+         
+
+
                 Global<object>.manejoAr.agregarVersion(repositorio, null);
+                Global<string>.CadenaListaEnlazada = Global<string>.CadenaListaEnlazada + repositorio.ToString();
 
 
             }
 
         }
+
 
 
 

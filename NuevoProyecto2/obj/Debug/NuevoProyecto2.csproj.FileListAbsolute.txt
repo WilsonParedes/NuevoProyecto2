@@ -1,7 +1,6 @@
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\bin\Debug\NuevoProyecto2.exe.config
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\bin\Debug\NuevoProyecto2.exe
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\bin\Debug\NuevoProyecto2.pdb
-C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\obj\Debug\NuevoProyecto2.csprojAssemblyReference.cache
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\obj\Debug\NuevoProyecto2.Form1.resources
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\obj\Debug\NuevoProyecto2.Properties.Resources.resources
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\obj\Debug\NuevoProyecto2.csproj.GenerateResource.cache
@@ -31,3 +30,4 @@ C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semest
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\bin\Debug\System.ValueTuple.xml
 C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\obj\Debug\NuevoProyecto2.csproj.CopyComplete
+C:\Users\wilso\OneDrive\Escritorio\Mariano Galvez\Tercer año 2021\Primer Semestre\Programación 3\NuevoProyecto2\NuevoProyecto2\NuevoProyecto2\obj\Debug\NuevoProyecto2.csproj.AssemblyReference.cache

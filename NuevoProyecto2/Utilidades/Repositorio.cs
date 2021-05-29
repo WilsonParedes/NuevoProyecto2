@@ -42,7 +42,7 @@ namespace NuevoProyecto2
 
         public int getContador()
         {
-            return contador;
+            return Convert.ToInt32(contadorauxiliar);
         }
         public string getComentario()
         {
@@ -54,7 +54,6 @@ namespace NuevoProyecto2
         }
         public string getFecha()
         {
-            fechaapoyo = fecha;
             return fechaapoyo;
         }
         public Repositorio(string nombreArchivo, string contenido, string pesoArchivo, string valorHexa)
@@ -126,6 +125,7 @@ namespace NuevoProyecto2
                    $"Comentario: {comentario}" + Global<char>.SeparadorPorcentaje +
                    $"Contenido: {contenido}" + Global<char>.SeparadorPorcentaje +
                    $"Separador: "+ Global<char>.SeparadorRalla;
+
             }
             return $"Versión No.:  {contador}" + Global<char>.SeparadorPorcentaje +
                    $"Fecha: {fecha}" + "%" +

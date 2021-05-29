@@ -15,6 +15,8 @@ namespace NuevoProyecto2
         private NodoVersiones<T> primero { get; set; }
         private NodoVersiones<T> anterior { get; set; }
         private NodoVersiones<T> enlace { get; set; }
+
+        private NodoVersiones<T> ultimo { get; set; }
         private NodoArbol<T> raiz { get; set; }
         public NodoArbol<T> RaizRepositorio { get; set; }
 
@@ -25,6 +27,7 @@ namespace NuevoProyecto2
             anterior = null;
             raiz = null;
             enlace = null;
+            ultimo = null;
 
         }
 
@@ -121,6 +124,7 @@ namespace NuevoProyecto2
         //Método encargado de recorrer e imprimir la Lista enlazada, según el formato requerito en el documento
         public void RecorreListaVersiones()
         {
+            string cadenaListaEnlazada = "";
             actual = primero;
             string lista = "";
             Console.WriteLine("\t\t\t\tDATOS ALMACENADOS EN LA BITACORA\n");
@@ -135,8 +139,54 @@ namespace NuevoProyecto2
                 
                     Console.WriteLine("\t\t\t\t" + ultimaVersion.contadorauxiliar.ToString().Substring(14) + "\t" + ultimaVersion.fechaapoyo.ToString().Substring(7) +
                         "\t" + ultimaVersion.comentario.ToString().Substring(12) + "\n");
+                cadenaListaEnlazada = cadenaListaEnlazada + lista;
                     actual = actual.siguiente;
+
             }
+        }
+
+        public void CargarDatosaLaBDD()
+        {
+
+            Global<object>.GB.LimpiarBDD();
+            string cadenaListaEnlazada = "";
+            actual = primero;
+            string lista = "";
+            string[] nuevoRepositorio;
+            Repositorio ultimaVersion;
+            
+            /*bool repetir = Global<bool>.MT.CrearDirectorio(Global<string>.folderParh, "temp BDD", Global<string>.codSys);
+            Console.WriteLine("Ingrese el nombre para el Backup de la BDD");
+            string backupBDD = Console.ReadLine();
+            Global<object>.MT.CrearArchivosEnDirectorio("create file "+ backupBDD+".txt", Global<string>.codSys, "", "");*/
+            while (actual != null)
+            {
+                string conten = "";
+                string comparar = "";
+                string nuevocontenido = "";
+                lista = actual.dato.ToString();
+                nuevoRepositorio = lista.Split(Global<char>.SeparadorPorcentaje);
+                for (int i = 3; i < nuevoRepositorio.Length; i++)
+                {
+                    conten = nuevoRepositorio[i];
+                    comparar = nuevoRepositorio[nuevoRepositorio.Length - 1];
+                    if (!conten.Equals(comparar))
+                    {
+                        nuevocontenido = nuevocontenido + conten + Global<string>.SeparadorPorcentaje;
+
+                    }
+                }
+                /*public Repositorio(string contadorauxiliar, string fechadeapoyo, string comentario, string contenido, char separador)*/
+                
+                ultimaVersion = new Repositorio(nuevoRepositorio[0].Substring(14), nuevoRepositorio[2].Substring(12), nuevocontenido.Substring(11), nuevoRepositorio[1].Substring(7), 1);
+                Global<object>.GB.GuardarBDD(ultimaVersion);
+               
+                actual = actual.siguiente;
+               
+
+            } 
+            
+        
         }
 
 
@@ -341,6 +391,12 @@ namespace NuevoProyecto2
         {
             Global<object>.nodoArbol.raiz = null;
             Global<object>.nodoArbol.RaizRepositorio = null;
+
+        }
+
+        public void EliminarElContenidodeListaEnlazada()
+        {
+            primero = null;
 
         }
 

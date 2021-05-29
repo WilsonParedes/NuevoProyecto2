@@ -64,6 +64,22 @@ namespace NuevoProyecto2.DataSystem
 			}
 		}
 
+
+		public void LimpiarBDD()
+		{
+			try
+			{
+				string dml = "DELETE FROM \"Bitacora\" ";
+				Console.WriteLine("dml = " + dml);
+				NpgsqlCommand delete = new NpgsqlCommand(dml, Global<object>.ConectaBDD);
+				delete.ExecuteNonQuery();
+				
+			}
+			catch (Exception throwables)
+			{
+				Console.WriteLine("No se puede crear");
+			}
+		}
 	}
 }
 

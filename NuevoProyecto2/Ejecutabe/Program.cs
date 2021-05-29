@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text;
 
+
 namespace NuevoProyecto2
 {
     static class Program
@@ -51,9 +52,8 @@ namespace NuevoProyecto2
                     {
                         repetir = Global<bool>.MT.CrearDirectorio(inicializar.Substring(5), nombreCarpeta, Global<string>.codSys);
                         Global<object>.MT.CrearArchivosEnDirectorio("create file bitacora.dat", Global<string>.codSys, "", "");
-                        Global<object>.conectar();
 
-                        Global<object>.GB.ExtraerTabla();
+                        Global<object>.conectar();
                     }
                     catch (ArgumentOutOfRangeException t)
                     {
@@ -134,7 +134,7 @@ namespace NuevoProyecto2
                             string eliminar;
                             Console.ForegroundColor = ConsoleColor.White;
                             Global<object>.manejoAr.EliminaNodoVersiones(Global<object>.manejoAr.ObtenerIndiceVersiones(op.Substring(7)) - 1);//Llamada al método ElminarNodo
-                            Global<object>.GB.EliminarRegistroBDD(Convert.ToInt32(op.Substring(7)));
+                            /*Global<object>.GB.EliminarRegistroBDD(Convert.ToInt32(op.Substring(7)));*/
                         }
                         else if (op.Contains("show tree view "))
                         {
@@ -158,7 +158,21 @@ namespace NuevoProyecto2
                         {
                             Global<object>.MT.RemoverHojadelArbol(Global<object>.manejoAr.DevueveCorrelativoVersion().ToString(), op);
 
+                        }else if(op.Contains("upload ")){
+                            Global<object>.GB.LimpiarBDD();
+                            Global<object>.manejoAr.CargarDatosaLaBDD();/*carga la info en memoria a la BDD*/
+
+
+                        }else if (op.Contains("download "))
+                        {
+                            Global<object>.manejoAr.EliminarElContenidodeListaEnlazada();
+                            Global<object>.GB.ExtraerTabla();
+                            Global<object>.manejoAr.CargarDatosaLaBDD();
+                            Global<object>.manejoAr.EliminarElContenidodeListaEnlazada();
+                            Global<object>.GB.ExtraerTabla();
+                            Global<object>.GB.LimpiarBDD();
                         }
+
                         else
                         {
                             if (op.Equals("exit"))

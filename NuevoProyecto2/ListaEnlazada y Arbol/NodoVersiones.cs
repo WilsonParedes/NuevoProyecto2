@@ -12,7 +12,9 @@ namespace NuevoProyecto2
         public T dato { get; set; }
         public NodoVersiones<T> siguiente { get; set; }
 
+        public NodoVersiones<T> ultimo { get; set; }
         public NodoVersiones<T> enlace { get; set; }
+
 
 
 
